@@ -9,9 +9,8 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @Repository
-@Service("jpaContactService")
 @Transactional
-public class NotificationDAO  {
+public class NotificationRepository  {
 
     @PersistenceContext
     private EntityManager em;

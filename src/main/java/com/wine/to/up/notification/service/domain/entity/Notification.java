@@ -18,19 +18,11 @@ public class Notification {
 
     @Id
     @Column(name = "id")
-    @Getter
-    @Setter
     private long id;
-    @Getter
-    @Setter
     @Column(name = "message")
     private String message;
-    @Getter
-    @Setter
     @Column(name = "type_id")
     private long typeId;
-    @Getter
-    @Setter
     @Column(name = "user_id")
     private long userId;
 
