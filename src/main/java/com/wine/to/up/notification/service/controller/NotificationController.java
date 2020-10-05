@@ -29,15 +29,15 @@ public class NotificationController {
         notificationRepository.update(notification);
     }
 
-    @GetMapping(value = "/?id={id}")
+    @GetMapping(value = "/{id}")
     public @ResponseBody
     Notification getNotificationById(@PathVariable(value = "id") Long id) {
         return notificationRepository.getById(id);
     }
 
-    @GetMapping(value = "/?userid={id}")
+    @GetMapping(value = "/")
     public @ResponseBody
-    List<Notification> getNotificationByUserId(@PathVariable(value = "id") Long id) {
+    List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
         return notificationRepository.getByUserId(id);
     }
 

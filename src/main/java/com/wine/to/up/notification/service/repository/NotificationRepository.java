@@ -37,7 +37,7 @@ public class NotificationRepository  {
     }
 
     public List<Notification> getByUserId(Long userId) {
-        return entityManager.createQuery("SELECT * from notification where user_id = ?1")
+        return entityManager.createQuery("SELECT n FROM Notification n WHERE n.userId = ?1")
                 .setParameter(1, userId)
                 .getResultList();
     }
