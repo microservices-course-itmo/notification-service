@@ -1,6 +1,7 @@
 package com.wine.to.up.notification.service.controller;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
+import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class NotificationController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public Optional<Notification> getNotificationById(@PathVariable(value = "id") Long id) {
-        return notificationRepository.findById(id);
+    public Notification getNotificationById(@PathVariable(value = "id") Long id) {
+        return notificationRepository.findById(id).orElseThrow(() -> new NotificationNotFoundException(id));
     }
 
     @GetMapping(value = "/")
