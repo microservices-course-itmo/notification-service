@@ -2,7 +2,6 @@ package com.wine.to.up.notification.service.controller;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/notification")
 @Validated
 @Slf4j
@@ -24,7 +22,7 @@ public class NotificationController {
         this.notificationRepository = notificationRepository;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PATCH)
+    @PutMapping(value = "/")
     public void updateNotification(@RequestBody Notification notification) {
         notificationRepository.update(notification);
     }
@@ -46,7 +44,12 @@ public class NotificationController {
         notificationRepository.delete(notification);
     }
 
-    @PutMapping
+    @DeleteMapping(value = "/{id}")
+    public void deleteNotificationById(@PathVariable(value = "id") Long id) {
+        notificationRepository.deleteById(id);
+    }
+
+    @PostMapping(value = "/")
     public void putNotification(@RequestBody Notification notification) {
         notificationRepository.save(notification);
     }
