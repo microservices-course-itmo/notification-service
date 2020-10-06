@@ -3,8 +3,8 @@ package com.wine.to.up.notification.service.logging;
 import com.wine.to.up.commonlib.logging.NotableEvent;
 
 public enum NotificationServiceNotableEvents implements NotableEvent {
-    NOTIFICATION_EVENT("Something happened"),
-    ANOTHER_NOTIFICATION_EVENT("Something else happened");
+    D_KAFKA_SEND_MESSAGE_SUCCESS("Kafka send message: {}"),
+    D_CONTROLLER_RECEIVED_MESSAGE("Message: {}");
 
     private final String template;
 
