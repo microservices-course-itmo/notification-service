@@ -29,7 +29,7 @@ public class Notification {
 
     @Column(name = "type_id")
     @Enumerated(EnumType.ORDINAL)
-    private NotificationType typeId;
+    private NotificationType type;
 
     @Column(name = "user_id")
     private long userId;
