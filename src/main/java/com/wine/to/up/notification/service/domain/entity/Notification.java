@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,13 +18,23 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Notification {
 
+    public enum NotificationTypeId {
+        IOS,
+        ANDROID,
+        UI;
+    }
+
     @Id
     @Column(name = "id")
     private long id;
+
     @Column(name = "message")
     private String message;
+
     @Column(name = "type_id")
-    private long typeId;
+    @Enumerated(EnumType.ORDINAL)
+    private NotificationTypeId typeId;
+
     @Column(name = "user_id")
     private long userId;
 
