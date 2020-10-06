@@ -52,7 +52,7 @@ public class NotificationController {
     }
 
     @PostMapping(value = "/")
-    public void putNotification(@RequestBody Notification notification) {
+    public void createNotification(@RequestBody Notification notification) {
         notificationRepository.save(notification);
     }
 }

@@ -29,7 +29,7 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(Long.valueOf(1));
+        Optional<Notification> found = notificationRepository.findById(1L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("testGetById");
     }
@@ -44,7 +44,7 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(Long.valueOf(2));
+        Optional<Notification> found = notificationRepository.findById(2L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("testPut");
     }
@@ -59,7 +59,7 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        List<Notification> found = notificationRepository.findAllByUserId(Long.valueOf(6));
+        List<Notification> found = notificationRepository.findAllByUserId(6L);
         assertThat(found.get(0).getMessage()).isEqualTo("testGetByUserId");
     }
 
@@ -75,7 +75,7 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("bar");
         notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(Long.valueOf(4));
+        Optional<Notification> found = notificationRepository.findById(4L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("bar");
     }
@@ -90,13 +90,34 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(Long.valueOf(5));
+        Optional<Notification> found = notificationRepository.findById(5L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("foo");
 
         notificationRepository.delete(notification);
 
-        Optional<Notification> notFound = notificationRepository.findById(Long.valueOf(5));
+        Optional<Notification> notFound = notificationRepository.findById(5L);
         assertThat(notFound.isPresent()).isFalse();
     }
+
+    @Test
+    public void testDeleteNotificationById() {
+        Notification notification = new Notification();
+        notification.setId(6);
+        notification.setMessage("foo");
+        notification.setTypeId(1);
+        notification.setUserId(5);
+
+        notificationRepository.save(notification);
+
+        Optional<Notification> found = notificationRepository.findById(6L);
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("foo");
+
+        notificationRepository.deleteById(6L);
+
+        Optional<Notification> notFound = notificationRepository.findById(6L);
+        assertThat(notFound.isPresent()).isFalse();
+    }
+
 }

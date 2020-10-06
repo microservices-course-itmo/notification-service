@@ -36,7 +36,7 @@ public class NotificationControllerIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(1));
+        Optional<Notification> found = notificationController.getNotificationById(1L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("testGetById");
     }
@@ -49,9 +49,9 @@ public class NotificationControllerIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(5);
 
-        notificationController.putNotification(notification);
+        notificationController.createNotification(notification);
 
-        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(2));
+        Optional<Notification> found = notificationController.getNotificationById(2L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("testPut");
     }
@@ -64,9 +64,9 @@ public class NotificationControllerIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(6);
 
-        notificationController.putNotification(notification);
+        notificationController.createNotification(notification);
 
-        List<Notification> found = notificationController.getNotificationByUserId(Long.valueOf(6));
+        List<Notification> found = notificationController.getNotificationByUserId(6L);
         assertThat(found.get(0).getMessage()).isEqualTo("testGetByUserId");
     }
 
@@ -78,11 +78,11 @@ public class NotificationControllerIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(5);
 
-        notificationController.putNotification(notification);
+        notificationController.createNotification(notification);
         notification.setMessage("bar");
         notificationController.updateNotification(notification);
 
-        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(4));
+        Optional<Notification> found = notificationController.getNotificationById(4L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("bar");
     }
@@ -95,15 +95,35 @@ public class NotificationControllerIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(5);
 
-        notificationController.putNotification(notification);
+        notificationController.createNotification(notification);
 
-        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(5));
+        Optional<Notification> found = notificationController.getNotificationById(5L);
         assertThat(found.isPresent()).isTrue();
         assertThat(found.get().getMessage()).isEqualTo("foo");
 
         notificationController.deleteNotification(notification);
 
-        Optional<Notification> notFound = notificationController.getNotificationById(Long.valueOf(5));
+        Optional<Notification> notFound = notificationController.getNotificationById(5L);
+        assertThat(notFound.isPresent()).isFalse();
+    }
+
+    @Test
+    public void testDeleteNotificationById() {
+        Notification notification = new Notification();
+        notification.setId(6);
+        notification.setMessage("foo");
+        notification.setTypeId(1);
+        notification.setUserId(5);
+
+        notificationController.createNotification(notification);
+
+        Optional<Notification> found = notificationController.getNotificationById(6L);
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("foo");
+
+        notificationController.deleteNotificationById(6L);
+
+        Optional<Notification> notFound = notificationController.getNotificationById(6L);
         assertThat(notFound.isPresent()).isFalse();
     }
 
