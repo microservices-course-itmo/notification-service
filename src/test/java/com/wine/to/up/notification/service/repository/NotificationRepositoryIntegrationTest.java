@@ -5,21 +5,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-
+import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@AutoConfigureTestDatabase
 public class NotificationRepositoryIntegrationTest {
-    @Autowired
-    private EntityManager notificationManager;
-
     @Autowired
     private NotificationRepository notificationRepository;
 
@@ -31,11 +27,11 @@ public class NotificationRepositoryIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(5);
 
-        notificationManager.persist(notification);
-        notificationManager.flush();
+        notificationRepository.save(notification);
 
-        Notification found = notificationRepository.getById(Long.valueOf(1));
-        assertThat(found.getMessage()).isEqualTo("testGetById");
+        Optional<Notification> found = notificationRepository.findById(Long.valueOf(1));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("testGetById");
     }
 
     @Test
@@ -48,8 +44,9 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Notification found = notificationRepository.getById(Long.valueOf(2));
-        assertThat(found.getMessage()).isEqualTo("testPut");
+        Optional<Notification> found = notificationRepository.findById(Long.valueOf(2));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("testPut");
     }
 
     @Test
@@ -62,7 +59,7 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        List<Notification> found = notificationRepository.getByUserId(Long.valueOf(6));
+        List<Notification> found = notificationRepository.findAllByUserId(Long.valueOf(6));
         assertThat(found.get(0).getMessage()).isEqualTo("testGetByUserId");
     }
 
@@ -76,10 +73,11 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
         notification.setMessage("bar");
-        notificationRepository.update(notification);
+        notificationRepository.save(notification);
 
-        Notification found = notificationRepository.getById(Long.valueOf(4));
-        assertThat(found.getMessage()).isEqualTo("bar");
+        Optional<Notification> found = notificationRepository.findById(Long.valueOf(4));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("bar");
     }
 
     @Test
@@ -92,12 +90,13 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        Notification found = notificationRepository.getById(Long.valueOf(5));
-        assertThat(found.getMessage()).isEqualTo("foo");
+        Optional<Notification> found = notificationRepository.findById(Long.valueOf(5));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("foo");
 
         notificationRepository.delete(notification);
 
-        Notification notFound = notificationRepository.getById(Long.valueOf(5));
-        assertThat(notFound).isEqualTo(null);
+        Optional<Notification> notFound = notificationRepository.findById(Long.valueOf(5));
+        assertThat(notFound.isPresent()).isFalse();
     }
 }

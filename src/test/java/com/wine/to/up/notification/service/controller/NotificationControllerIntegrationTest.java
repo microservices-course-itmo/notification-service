@@ -3,25 +3,25 @@ package com.wine.to.up.notification.service.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import javax.persistence.EntityManager;
+import java.util.Optional;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
-
+import com.wine.to.up.notification.service.repository.NotificationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@AutoConfigureTestDatabase
 public class NotificationControllerIntegrationTest {
     @Autowired
-    private EntityManager notificationManager;
+    private NotificationRepository notificationRepository;
 
     @Autowired
     private NotificationController notificationController;
@@ -34,11 +34,11 @@ public class NotificationControllerIntegrationTest {
         notification.setTypeId(1);
         notification.setUserId(5);
 
-        notificationManager.persist(notification);
-        notificationManager.flush();
+        notificationRepository.save(notification);
 
-        Notification found = notificationController.getNotificationById(Long.valueOf(1));
-        assertThat(found.getMessage()).isEqualTo("testGetById");
+        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(1));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("testGetById");
     }
 
     @Test
@@ -51,8 +51,9 @@ public class NotificationControllerIntegrationTest {
 
         notificationController.putNotification(notification);
 
-        Notification found = notificationController.getNotificationById(Long.valueOf(2));
-        assertThat(found.getMessage()).isEqualTo("testPut");
+        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(2));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("testPut");
     }
 
     @Test
@@ -81,8 +82,9 @@ public class NotificationControllerIntegrationTest {
         notification.setMessage("bar");
         notificationController.updateNotification(notification);
 
-        Notification found = notificationController.getNotificationById(Long.valueOf(4));
-        assertThat(found.getMessage()).isEqualTo("bar");
+        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(4));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("bar");
     }
 
     @Test
@@ -95,13 +97,14 @@ public class NotificationControllerIntegrationTest {
 
         notificationController.putNotification(notification);
 
-        Notification found = notificationController.getNotificationById(Long.valueOf(5));
-        assertThat(found.getMessage()).isEqualTo("foo");
+        Optional<Notification> found = notificationController.getNotificationById(Long.valueOf(5));
+        assertThat(found.isPresent()).isTrue();
+        assertThat(found.get().getMessage()).isEqualTo("foo");
 
         notificationController.deleteNotification(notification);
 
-        Notification notFound = notificationController.getNotificationById(Long.valueOf(5));
-        assertThat(notFound).isEqualTo(null);
+        Optional<Notification> notFound = notificationController.getNotificationById(Long.valueOf(5));
+        assertThat(notFound.isPresent()).isFalse();
     }
 
 }

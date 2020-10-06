@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/notification")
@@ -15,6 +16,7 @@ import java.util.List;
 @Slf4j
 public class NotificationController {
 
+    @Autowired
     private NotificationRepository notificationRepository;
 
     @Autowired
@@ -24,19 +26,19 @@ public class NotificationController {
 
     @PutMapping(value = "/")
     public void updateNotification(@RequestBody Notification notification) {
-        notificationRepository.update(notification);
+        notificationRepository.save(notification);
     }
 
     @GetMapping(value = "/{id}")
     public @ResponseBody
-    Notification getNotificationById(@PathVariable(value = "id") Long id) {
-        return notificationRepository.getById(id);
+    Optional<Notification> getNotificationById(@PathVariable(value = "id") Long id) {
+        return notificationRepository.findById(id);
     }
 
     @GetMapping(value = "/")
     public @ResponseBody
     List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
-        return notificationRepository.getByUserId(id);
+        return notificationRepository.findAllByUserId(id);
     }
 
     @DeleteMapping(value = "/")
