@@ -32,7 +32,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(1);
         notification.setMessage("testGetById");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -47,7 +47,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(2);
         notification.setMessage("testPut");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(5);
 
         notificationController.createNotification(notification);
@@ -62,7 +62,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(3);
         notification.setMessage("testGetByUserId");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(6);
 
         notificationController.createNotification(notification);
@@ -76,7 +76,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(4);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(5);
 
         notificationController.createNotification(notification);
@@ -93,7 +93,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(5);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(5);
 
         notificationController.createNotification(notification);
@@ -113,7 +113,7 @@ public class NotificationControllerIntegrationTest {
         Notification notification = new Notification();
         notification.setId(6);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationType.UI);
+        notification.setType(NotificationType.UI);
         notification.setUserId(5);
 
         notificationController.createNotification(notification);
