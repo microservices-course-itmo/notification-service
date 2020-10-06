@@ -28,6 +28,10 @@ public class NotificationRepository  {
         entityManager.remove(mergedNotification);
     }
 
+    public void deleteById(Long id) {
+        entityManager.remove(getById(id));
+    }
+
     public Notification getById(Long id) {
         return entityManager.find(Notification.class, id);
     }
