@@ -11,18 +11,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.wine.to.up.notification.service.domain.util.NotificationType;
+
 @Entity
 @Table(name = "notification")
 @Setter
 @Getter
 @NoArgsConstructor
 public class Notification {
-
-    public enum NotificationTypeId {
-        IOS,
-        ANDROID,
-        UI;
-    }
 
     @Id
     @Column(name = "id")
@@ -33,7 +29,7 @@ public class Notification {
 
     @Column(name = "type_id")
     @Enumerated(EnumType.ORDINAL)
-    private NotificationTypeId typeId;
+    private NotificationType typeId;
 
     @Column(name = "user_id")
     private long userId;

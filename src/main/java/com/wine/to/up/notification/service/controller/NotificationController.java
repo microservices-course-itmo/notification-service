@@ -19,7 +19,6 @@ public class NotificationController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Autowired
     public NotificationController(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
@@ -30,12 +29,14 @@ public class NotificationController {
     }
 
     @GetMapping(value = "/{id}")
-    public @ResponseBody Optional<Notification> getNotificationById(@PathVariable(value = "id") Long id) {
+    @ResponseBody
+    public Optional<Notification> getNotificationById(@PathVariable(value = "id") Long id) {
         return notificationRepository.findById(id);
     }
 
     @GetMapping(value = "/")
-    public @ResponseBody List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
+    @ResponseBody
+    public List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
         return notificationRepository.findAllByUserId(id);
     }
 

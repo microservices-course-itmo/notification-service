@@ -1,7 +1,7 @@
 package com.wine.to.up.notification.service.repository;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
-import com.wine.to.up.notification.service.domain.entity.Notification.NotificationTypeId;
+import com.wine.to.up.notification.service.domain.util.NotificationType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(1);
         notification.setMessage("testGetById");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -40,7 +40,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(2);
         notification.setMessage("testPut");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -55,7 +55,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(3);
         notification.setMessage("testGetByUserId");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(6);
 
         notificationRepository.save(notification);
@@ -69,7 +69,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(4);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -86,7 +86,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(5);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -106,7 +106,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(6);
         notification.setMessage("foo");
-        notification.setTypeId(NotificationTypeId.UI);
+        notification.setTypeId(NotificationType.UI);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
