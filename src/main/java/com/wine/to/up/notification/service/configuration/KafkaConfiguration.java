@@ -6,6 +6,7 @@ import com.wine.to.up.commonlib.messaging.KafkaMessageSender;
 import com.wine.to.up.notification.service.api.NotificationServiceApiProperties;
 import com.wine.to.up.notification.service.api.message.KafkaMessageSentEventOuterClass.KafkaMessageSentEvent;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
+import com.wine.to.up.notification.service.messaging.CatalogKafkaMessageHandler;
 import com.wine.to.up.notification.service.messaging.TestTopicKafkaMessageHandler;
 import com.wine.to.up.notification.service.messaging.serialization.EventDeserializer;
 import com.wine.to.up.notification.service.messaging.serialization.EventSerializer;
@@ -111,5 +112,14 @@ public class KafkaConfiguration {
         producerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
 
         return new KafkaMessageSender<>(new KafkaProducer<>(producerProperties), notificationServiceApiProperties.getMessageSentEventsTopicName(), metricsCollector);
+    }
+
+    @Bean
+    BaseKafkaHandler<KafkaMessageSentEvent> catalogTopicKafkaMessgeHandler(Properties consumerProperties,
+                                                                           NotificationServiceApiProperties notificationServiceApiProperties,
+                                                                           CatalogKafkaMessageHandler handler) {
+
+        consumerProperties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());
+        return new BaseKafkaHandler<>(notificationServiceApiProperties.getMessageSentEventsTopicName(), new KafkaConsumer<>(consumerProperties), handler);
     }
 }
