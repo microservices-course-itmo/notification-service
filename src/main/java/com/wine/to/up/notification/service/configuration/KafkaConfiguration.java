@@ -115,9 +115,9 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    BaseKafkaHandler<KafkaMessageSentEvent> catalogTopicKafkaMessgeHandler(Properties consumerProperties,
-                                                                           NotificationServiceApiProperties notificationServiceApiProperties,
-                                                                           CatalogKafkaMessageHandler handler) {
+    BaseKafkaHandler<KafkaMessageSentEvent> catalogTopicKafkaMessageHandler(Properties consumerProperties,
+                                                                            NotificationServiceApiProperties notificationServiceApiProperties,
+                                                                            CatalogKafkaMessageHandler handler) {
 
         consumerProperties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());
         return new BaseKafkaHandler<>(notificationServiceApiProperties.getMessageSentEventsTopicName(), new KafkaConsumer<>(consumerProperties), handler);
