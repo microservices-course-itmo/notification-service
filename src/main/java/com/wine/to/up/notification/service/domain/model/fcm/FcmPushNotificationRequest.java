@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FcmPushNotificationRequest {
     private String title;
+    private String topic;
     private String message;
     private String clientToken;
 }
