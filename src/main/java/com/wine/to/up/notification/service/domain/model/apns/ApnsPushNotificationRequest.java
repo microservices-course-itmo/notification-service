@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.service.apns;
+package com.wine.to.up.notification.service.domain.model.apns;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

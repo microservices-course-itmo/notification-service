@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 public class ApnsSettings {
-    private String serviceAccountFile;
+    private String keyFile;
     private String teamId;
     private String keyId;
 }
