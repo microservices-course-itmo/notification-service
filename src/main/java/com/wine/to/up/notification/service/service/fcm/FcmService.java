@@ -12,14 +12,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FcmService {
 
-
-    private Message.Builder getMessageBuilder(FcmPushNotificationRequest request) {
-        AndroidConfig config = getAndroidConfig();
-        return Message.builder()
-                .setAndroidConfig(config)
-                .setNotification(new Notification(request.getTitle(), request.getMessage()));
-    }
-
     private AndroidConfig getAndroidConfig() {
         return AndroidConfig.builder()
                 .setTtl(Duration.ofMinutes(2).toMillis())
@@ -30,32 +22,27 @@ public class FcmService {
                 .build();
     }
 
-    private ApnsConfig getApnsConfig(String topic) {
-        return ApnsConfig.builder()
-                .setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
-    }
 
-    public void sendMessageWithoutData(FcmPushNotificationRequest request)
+    public void sendMessage(FcmPushNotificationRequest request)
             throws InterruptedException, ExecutionException {
-        Message message = getPreconfiguredMessageWithoutData(request);
+        Message message = getPreconfiguredMessage(request);
         String response = sendAndGetResponse(message);
-        log.info("Sent message without data. Topic: " + request.getTopic() + ", " + response);
+        log.debug("Sent message without data. Token: " + request.getClientToken() + ", " + response);
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
         return FirebaseMessaging.getInstance().sendAsync(message).get();
     }
 
-    private Message getPreconfiguredMessageWithoutData(FcmPushNotificationRequest request) {
-        return getPreconfiguredMessageBuilder(request).setTopic(request.getTopic())
+    private Message getPreconfiguredMessage(FcmPushNotificationRequest request) {
+        return getPreconfiguredMessageBuilder(request).setToken(request.getClientToken())
                 .build();
     }
 
     private Message.Builder getPreconfiguredMessageBuilder(FcmPushNotificationRequest request) {
         AndroidConfig androidConfig = getAndroidConfig();
-        ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
         return Message.builder()
-                .setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(
+                .setAndroidConfig(androidConfig).setNotification(
                         new Notification(request.getTitle(), request.getMessage()));
     }
 }
