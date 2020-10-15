@@ -37,16 +37,12 @@ public class ApnsService {
         }
     }
 
-    public PushNotificationResponse<SimpleApnsPushNotification> sendMessage(ApnsPushNotificationRequest request) {
+    public PushNotificationResponse<SimpleApnsPushNotification> sendMessage(ApnsPushNotificationRequest request)
+            throws ExecutionException, InterruptedException {
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
-        try {
-            return apnsClient.sendNotification(notification).get();
-        } catch (ExecutionException | InterruptedException e) {
-            log.error("Failed to send notification to device " + request.getDeviceToken(), e);
-            return null;
-        }
+        return apnsClient.sendNotification(notification).get();
     }
 
 }
