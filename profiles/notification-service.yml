@@ -8,6 +8,8 @@ services:
     environment:
       - S_POSTGRES_HOST=postgres
       - S_KAFKA_BOOTSTRAP_HOST=kafka:9092
+      - S_POSTGRES_PASSWORD=postgres
+      - S_POSTGRES_USER=postgres
     depends_on:
       - kafka
       - postgres

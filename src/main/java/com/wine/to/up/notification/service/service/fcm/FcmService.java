@@ -2,6 +2,7 @@ package com.wine.to.up.notification.service.service.fcm;
 
 import com.google.firebase.messaging.*;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
+import com.wine.to.up.notification.service.service.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Service
-public class FcmService {
+public class FcmService implements NotificationSender<FcmPushNotificationRequest> {
 
     private AndroidConfig getAndroidConfig() {
         return AndroidConfig.builder()
@@ -22,7 +23,7 @@ public class FcmService {
                 .build();
     }
 
-
+    @Override
     public void sendMessage(FcmPushNotificationRequest request)
             throws InterruptedException, ExecutionException {
         Message message = getPreconfiguredMessage(request);

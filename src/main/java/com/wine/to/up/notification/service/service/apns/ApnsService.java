@@ -6,6 +6,7 @@ import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
+import com.wine.to.up.notification.service.service.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
-public class ApnsService {
+public class ApnsService implements NotificationSender<ApnsPushNotificationRequest> {
 
     private ApnsClient apnsClient;
 
@@ -37,12 +38,14 @@ public class ApnsService {
         }
     }
 
-    public PushNotificationResponse<SimpleApnsPushNotification> sendMessage(ApnsPushNotificationRequest request)
+    @Override
+    public void sendMessage(ApnsPushNotificationRequest request)
             throws ExecutionException, InterruptedException {
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
-        return apnsClient.sendNotification(notification).get();
+        PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
+        log.info("Sent message to device: " + request.getDeviceToken() + ", " + response.toString());
     }
 
 }
