@@ -1,8 +1,8 @@
-package com.wine.to.up.notification.service.service.fcm;
+package com.wine.to.up.notification.service.mobile.fcm;
 
 import com.google.firebase.messaging.*;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
-import com.wine.to.up.notification.service.service.NotificationSender;
+import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
