@@ -19,14 +19,36 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
-//@Service
+@Service
 @Slf4j
+/**
+ * A service used to send push notifications to Apple devices
+ * through Apple Push Notification Service (APNS).
+ * Uses ApnsSettings to load credentials from application.properties.
+ * @see com.wine.to.up.notification.service.mobile.apns.ApnsSettings
+ */
 public class ApnsService implements NotificationSender<ApnsPushNotificationRequest> {
 
+    /**
+     * Pushy's APNS client for sending Apple pushes.
+     */
     private ApnsClient apnsClient;
 
+    /**
+     * Reads settings from ApnsSettings, tries to read APNS cert file.
+     * If read successfully, initializes ApnsClient.
+     * 
+     * @param settings  ApnsSettings created on startup
+     */
     public ApnsService(ApnsSettings settings) {
-        Path p = Paths.get(settings.getKeyFile());
+        Path p;
+        try {
+            p = Paths.get(settings.getKeyFile());
+        } catch (NullPointerException e) {
+            log.error("Error reading APNS certificate file: " + settings.getKeyFile());
+            return;
+        }
+
         try (InputStream stream = Files.newInputStream(p)) {
             apnsClient = new ApnsClientBuilder()
                     .setApnsServer(ApnsClientBuilder.DEVELOPMENT_APNS_HOST)
@@ -39,6 +61,17 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
     }
 
     @Override
+    /**
+     * Implementation of NotificationSender's sendMessage for APNS.
+     * 
+     * @param request  Data object with APNS push information
+     * 
+     * @throws ExecutionException
+     * @throws InterruptedException
+     * 
+     * @see com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest
+     * @see com.wine.to.up.notification.service.mobile.NotificationSender
+     */
     public void sendMessage(ApnsPushNotificationRequest request)
             throws ExecutionException, InterruptedException {
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(

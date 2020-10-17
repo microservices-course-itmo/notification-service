@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * A data class containing information for sending APNS push notifications.
+ */
 public class ApnsPushNotificationRequest {
     private String deviceToken;
     private String topic;

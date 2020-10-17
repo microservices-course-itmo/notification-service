@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -33,10 +34,9 @@ public class CatalogKafkaMessageHandler implements KafkaMessageHandler<KafkaMess
             notificationSender.sendMessage(new FcmPushNotificationRequest());
 
         } catch (JsonProcessingException e) {
-            log.error("Could not parse Kafka message from Catalog Service!");
+            log.error("Could not parse Kafka message from Catalog Service", e);
         } catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace();
-            log.error("Failed to send notification!");
+            log.error("Failed to send notification", ex);
         }
 
     }
