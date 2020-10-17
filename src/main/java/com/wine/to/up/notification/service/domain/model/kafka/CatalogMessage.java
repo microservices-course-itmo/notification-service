@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.domain.entity;
+package com.wine.to.up.notification.service.domain.model.kafka;
 
 
 import lombok.*;

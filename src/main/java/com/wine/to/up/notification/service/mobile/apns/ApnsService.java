@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.service.apns;
+package com.wine.to.up.notification.service.mobile.apns;
 
 import com.eatthepath.pushy.apns.ApnsClient;
 import com.eatthepath.pushy.apns.ApnsClientBuilder;
@@ -6,7 +6,7 @@ import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
-import com.wine.to.up.notification.service.service.NotificationSender;
+import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
-@Service
+//@Service
 @Slf4j
 public class ApnsService implements NotificationSender<ApnsPushNotificationRequest> {
 

@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.service.fcm;
+package com.wine.to.up.notification.service.mobile.fcm;
 
 import java.io.IOException;
 import javax.annotation.PostConstruct;

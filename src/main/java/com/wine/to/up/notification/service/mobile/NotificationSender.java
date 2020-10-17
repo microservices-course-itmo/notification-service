@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.service;
+package com.wine.to.up.notification.service.mobile;
 
 import java.util.concurrent.ExecutionException;
 
