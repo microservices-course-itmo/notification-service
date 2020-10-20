@@ -28,7 +28,7 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
             throws InterruptedException, ExecutionException {
         Message message = getPreconfiguredMessage(request);
         String response = sendAndGetResponse(message);
-        log.debug("Sent message without data. Token: " + request.getClientToken() + ", " + response);
+        log.debug("Sent message without data. " + response);
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
@@ -36,7 +36,9 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
     }
 
     private Message getPreconfiguredMessage(FcmPushNotificationRequest request) {
-        return getPreconfiguredMessageBuilder(request).setToken(request.getClientToken())
+        return getPreconfiguredMessageBuilder(request)
+                //.setToken("AAAAro0ss70:APA91bFXxxsSuLIlAc9_q5Uil0GgxdIcdEaL126vsu0yTZ2y6df0vNNZLe-iPQ2HHzSBD6RE7ekUzzBDwWoqgusFreDp7I8LceAa320NvhX9CgBJTieQSrbTSOzaLEJBaFyUFaoBKji9")
+                .setTopic("catalog")
                 .build();
     }
 
