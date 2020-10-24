@@ -1,6 +1,8 @@
 package com.wine.to.up.notification.service.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wine.to.up.notification.service.mobile.NotificationSender;
+import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,5 +24,10 @@ public class GeneralPurposesBeansConfig {
     @Bean
     public ObjectMapper getObjectMapper() {
         return new ObjectMapper();
+    }
+
+    @Bean
+    public NotificationSender notificationSender(){
+        return new FcmService();
     }
 }
