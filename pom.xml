@@ -71,12 +71,17 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <!-- H2 for tests -->
+        <!-- for tests -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
 	    </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Recommended-->
         <dependency>
