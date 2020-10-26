@@ -36,7 +36,8 @@ public class FcmTest {
             fcmService.sendMessage(fcmPushNotificationRequest);
         });
 
-        assertThat(thrown).isInstanceOf(ExecutionException.class);
+        assertThat(thrown).isInstanceOf(ExecutionException.class)
+                .hasMessageContaining("Unexpected HTTP response with status: 401");
     }
 
     private static class MockGoogleCredentials extends GoogleCredentials {
