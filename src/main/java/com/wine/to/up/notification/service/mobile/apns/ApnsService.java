@@ -3,20 +3,15 @@ package com.wine.to.up.notification.service.mobile.apns;
 import com.eatthepath.pushy.apns.ApnsClient;
 import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import com.eatthepath.pushy.apns.PushNotificationResponse;
-import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -38,24 +33,19 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      * Reads settings from ApnsSettings, tries to read APNS cert file.
      * If read successfully, initializes ApnsClient.
      * 
-     * @param settings  ApnsSettings created on startup
+     * @param settings ApnsSettings created on startup
      */
     public ApnsService(ApnsSettings settings) {
-        Path p;
+        log.info("Creating ApnsService...");
         try {
-            p = Paths.get(settings.getKeyFile());
-        } catch (NullPointerException e) {
-            log.error("Error reading APNS certificate file: " + settings.getKeyFile());
-            return;
-        }
+            final File keyFile = new File(this.getClass().getResource("/single-topic-client.p12").toURI());
 
-        try (InputStream stream = Files.newInputStream(p)) {
             apnsClient = new ApnsClientBuilder()
                     .setApnsServer(ApnsClientBuilder.DEVELOPMENT_APNS_HOST)
-                    .setSigningKey(ApnsSigningKey.loadFromInputStream(stream, settings.getTeamId(), settings.getKeyId()))
+                    .setClientCredentials(keyFile, "pushy-test")
                     .build();
             log.info("Successfully initialized APNS");
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (URISyntaxException | IOException e) {
             log.error("Error initializing APNS client", e);
         }
     }
@@ -74,6 +64,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      */
     public void sendMessage(ApnsPushNotificationRequest request)
             throws ExecutionException, InterruptedException {
+        log.info("Sending notification to device: " + request.getDeviceToken());
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
