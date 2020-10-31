@@ -1,6 +1,5 @@
-package com.wine.to.up.user.service.api;
+package com.wine.to.up.user.service.api.dto;
 
-import com.wine.to.up.user.service.api.dto.UserTokens;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
