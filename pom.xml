@@ -21,6 +21,7 @@
         <service.commonlib.version>0.2.1-SNAPSHOT</service.commonlib.version>
         <service.firebase.version>6.8.1</service.firebase.version>
         <service.pushy.version>0.14.1</service.pushy.version>
+        <user-service-api.version>0.1.2-SNAPSHOT</user-service-api.version>
 
         <notification.service.api.version>0.1.0-SNAPSHOT</notification.service.api.version>
 

@@ -21,10 +21,10 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${kafka.server}")
+    @Value("${spring.kafka.bootstrap-server}")
     private String kafkaServer;
 
-    @Value("${kafka.group.id}")
+    @Value("${spring.kafka.consumer.group-id}")
     private String kafkaGroupId;
 
     @Bean
