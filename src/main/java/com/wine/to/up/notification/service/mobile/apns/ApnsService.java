@@ -38,14 +38,20 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
     public ApnsService(ApnsSettings settings) {
         log.info("Creating ApnsService...");
         try {
-            final File keyFile = new File(this.getClass().getResource("/single-topic-client.p12").toURI());
+            final File keyFile = new File(this.getClass().getResource(settings.getFilePath()).toURI());
 
-            apnsClient = new ApnsClientBuilder()
-                    .setApnsServer(ApnsClientBuilder.DEVELOPMENT_APNS_HOST)
-                    .setClientCredentials(keyFile, "pushy-test")
-                    .build();
-            log.info("Successfully initialized APNS");
-        } catch (URISyntaxException | IOException e) {
+            ApnsClientBuilder apnsClientBuilder = new ApnsClientBuilder()
+                    .setApnsServer(settings.getApnsServerHost(), settings.getApnsServerPort())
+                    .setClientCredentials(keyFile, settings.getFilePassword());
+            if (settings.getTrustedCertificatePath() != null) {
+                apnsClientBuilder.setTrustedServerCertificateChain(
+                        this.getClass().getResourceAsStream(settings.getTrustedCertificatePath())
+                );
+            }
+            apnsClient = apnsClientBuilder.build();
+
+            log.info("Successfully initialized APNS client");
+        } catch (URISyntaxException | IOException | NullPointerException e) {
             log.error("Error initializing APNS client", e);
         }
     }
