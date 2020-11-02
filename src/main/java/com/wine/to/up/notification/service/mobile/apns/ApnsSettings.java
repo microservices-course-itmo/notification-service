@@ -1,5 +1,6 @@
 package com.wine.to.up.notification.service.mobile.apns;
 
+import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,4 +19,8 @@ import org.springframework.stereotype.Component;
 public class ApnsSettings {
     private String filePath;
     private String filePassword;
+
+    private String trustedCertificatePath = null;
+    private String apnsServerHost = ApnsClientBuilder.DEVELOPMENT_APNS_HOST;
+    private int apnsServerPort = 443;
 }

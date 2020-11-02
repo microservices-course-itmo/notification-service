@@ -5,27 +5,44 @@ import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificatio
 import org.junit.Test;
 
 import java.io.File;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ApnsTest {
+    private static final int PORT = 15555;
+
+    private static final String CA_CERTIFICATE_FILENAME = "/ca.pem";
     private static final String SERVER_CERTIFICATE_FILENAME = "/server-certs.pem";
     private static final String SERVER_KEY_FILENAME = "/server-key.pem";
 
-    private ApnsSettings apnsSettings = new ApnsSettings();
-    private ApnsService apnsService = new ApnsService(apnsSettings);
+    private ApnsSettings apnsSettings;
+    private ApnsService apnsService;
     private MockApnsServer apnsServer;
 
     @Test
-    public void testSendMessage() throws AssertionError {
+    public void testSendMessage() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(256, new SecureRandom());
+
+        apnsSettings = new ApnsSettings();
+        apnsSettings.setFilePath("/single-topic-client.p12");
+        apnsSettings.setFilePassword("pushy-test");
+        apnsSettings.setTrustedCertificatePath(CA_CERTIFICATE_FILENAME);
+        apnsSettings.setApnsServerHost("localhost");
+        apnsSettings.setApnsServerPort(PORT);
+
+        apnsService = new ApnsService(apnsSettings);
+
         try {
             apnsServer = createApnsServer();
         } catch (Exception e) {
             throw new AssertionError("Failed to create apnsServer", e);
         }
-        apnsServer.start(15555);
+        apnsServer.start(PORT).get();
 
         ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
         apnsPushNotificationRequest.setDeviceToken("sample");
@@ -39,7 +56,7 @@ public class ApnsTest {
         }
 
         ArrayList<io.netty.buffer.ByteBuf> queue = ApnsPushNotificationStorage.INSTANCE.getQueue();
-        assertThat(queue.size()).isEqualTo(0);
+        assertThat(queue.size()).isEqualTo(1);
 
         apnsServer.shutdown();
     }
@@ -51,6 +68,7 @@ public class ApnsTest {
 
         return new MockApnsServerBuilder()
                 .setServerCredentials(certificateFile, keyFile, null)
+                .setTrustedClientCertificateChain(getClass().getResourceAsStream(CA_CERTIFICATE_FILENAME))
                 .setHandlerFactory(new AcceptAllPushNotificationHandlerFactory())
                 .setListener(listener)
                 .build();
