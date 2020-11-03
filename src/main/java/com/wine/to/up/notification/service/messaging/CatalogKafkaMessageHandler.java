@@ -11,17 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
 @Slf4j
 public class CatalogKafkaMessageHandler implements KafkaMessageHandler<KafkaMessageSentEvent> {
 
-    private NotificationSender notificationSender;
+    private NotificationSender<FcmPushNotificationRequest> notificationSender;
 
     @Autowired
-    public CatalogKafkaMessageHandler(NotificationSender notificationSender){
+    public CatalogKafkaMessageHandler(NotificationSender<FcmPushNotificationRequest> notificationSender){
         this.notificationSender=notificationSender;
     }
 
