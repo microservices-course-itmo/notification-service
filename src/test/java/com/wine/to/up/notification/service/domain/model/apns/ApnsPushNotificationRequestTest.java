@@ -15,7 +15,7 @@ public class ApnsPushNotificationRequestTest {
     @Test
     public void testNoArgsConstructor() {
         ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
-        assertThat(apnsPushNotificationRequest.getDeviceToken()).isEqualTo(null);
+        assertThat(apnsPushNotificationRequest.getDeviceToken()).isNull();
     }
 
     @Test
