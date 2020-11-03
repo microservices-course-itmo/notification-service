@@ -32,6 +32,11 @@
             <artifactId>service-common-lib</artifactId>
             <version>${service.commonlib.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.wine.to.up</groupId>
+            <artifactId>user-service-api</artifactId>
+            <version>0.1.2-SNAPSHOT</version>
+        </dependency>
 
         <!-- Required: Spring-->
         <dependency>
