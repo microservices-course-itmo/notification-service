@@ -12,9 +12,9 @@ import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.apns.ApnsSettings;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import com.wine.to.up.user.service.api.dto.UserTokens;
-import com.wine.to.up.user.service.api.dto.WineResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +35,9 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
     @Override
     @KafkaListener(id = "user-service-topic-listener", topics = {"wine-response-topic"}, containerFactory = "batchFactory")
     public void handle(KafkaMessageSentEvent message) {
-        final WineResponse wineResponse;
+        final WinePriceUpdatedResponse wineResponse;
         try {
-            wineResponse = new ObjectMapper().readValue(message.getMessage(), WineResponse.class);
+            wineResponse = new ObjectMapper().readValue(message.getMessage(), WinePriceUpdatedResponse.class);
             log.info("Message received:{}", wineResponse);
             for (UserTokens userTokens : wineResponse.getUserTokens()) {
                 ApnsService apnsService = new ApnsService(new ApnsSettings());
