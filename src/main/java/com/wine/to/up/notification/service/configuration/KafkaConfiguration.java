@@ -6,7 +6,6 @@ import com.wine.to.up.commonlib.messaging.KafkaMessageSender;
 import com.wine.to.up.notification.service.api.NotificationServiceApiProperties;
 import com.wine.to.up.notification.service.api.message.KafkaMessageSentEventOuterClass.KafkaMessageSentEvent;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
-import com.wine.to.up.notification.service.messaging.CatalogKafkaMessageHandler;
 import com.wine.to.up.notification.service.messaging.TestTopicKafkaMessageHandler;
 import com.wine.to.up.notification.service.messaging.serialization.EventDeserializer;
 import com.wine.to.up.notification.service.messaging.serialization.EventSerializer;
