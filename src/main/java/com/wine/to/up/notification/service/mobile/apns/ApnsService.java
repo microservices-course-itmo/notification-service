@@ -8,7 +8,6 @@ import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificatio
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;

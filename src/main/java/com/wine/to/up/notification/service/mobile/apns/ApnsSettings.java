@@ -1,10 +1,12 @@
 package com.wine.to.up.notification.service.mobile.apns;
 
+
 import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
 
 
 @ConfigurationProperties(prefix = "apns")

@@ -1,15 +1,15 @@
 package com.wine.to.up.notification.service.mobile.fcm;
 
-import java.io.IOException;
-import javax.annotation.PostConstruct;
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 
 @Service
@@ -28,9 +28,10 @@ public class FcmInitializer {
     public void initialize() {
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials
-                    .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                )
+                    .setCredentials(GoogleCredentials
+                            .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+
+                    ).setDatabaseUrl("https://wineup-android.firebaseio.com")
                 .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
