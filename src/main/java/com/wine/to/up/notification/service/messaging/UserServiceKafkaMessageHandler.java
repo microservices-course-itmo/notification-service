@@ -44,13 +44,15 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
                 FcmService fcmService = new FcmService();
                 if (!userTokens.getIosTokens().isEmpty()) {
                     for (String token : userTokens.getIosTokens()) {
-                        apnsService.sendMessage(new ApnsPushNotificationRequest(token, "default", "payload"));
+                        apnsService.sendMessage(new ApnsPushNotificationRequest(token, "default",
+                                "New discount on " + wineResponse.getWineName() + "! New price is: " + wineResponse.getNewWinePrice()));
                     }
                 }
 
                 if (!userTokens.getFcmTokens().isEmpty()) {
                     for (String token : userTokens.getFcmTokens()) {
-                        fcmService.sendMessage(new FcmPushNotificationRequest("title", "message", token));
+                        fcmService.sendMessage(new FcmPushNotificationRequest("New discount on " + wineResponse.getWineName() + "!",
+                                "New price is: " + wineResponse.getNewWinePrice(), token));
                     }
                 }
             }
