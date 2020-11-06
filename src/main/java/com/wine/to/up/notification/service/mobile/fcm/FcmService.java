@@ -21,8 +21,9 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FcmService implements NotificationSender<FcmPushNotificationRequest> {
 
-    @Value("app.firebase-token")
-    private String token;
+    @Value("${app.notifications.defaults:token}")
+
+    private String defaultToken;
 
     
     /**
@@ -52,7 +53,7 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
         return Message.builder()
                 .setAndroidConfig(getAndroidConfig())
                 .setNotification(new Notification(request.getTitle(), request.getMessage()))
-                .setToken(token)
+                .setToken(request.getClientToken())
                 //.setTopic("catalog")
                 .build();
     }
