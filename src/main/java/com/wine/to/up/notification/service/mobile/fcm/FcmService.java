@@ -10,6 +10,13 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * A service used to send push notifications to Android devices
+ * through Firebase Cloud Messaging (FCM).
+ * Uses FirebaseApp initialized on startup in FcmInitializer.
+ * @see com.wine.to.up.notification.service.mobile.fcm.FcmInitializer
+ */
+
 @Slf4j
 @Service
 public class FcmService implements NotificationSender<FcmPushNotificationRequest> {
@@ -17,6 +24,18 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
     @Value("app.firebase-token")
     private String token;
 
+    
+    /**
+     * Implementation of NotificationSender's sendMessage for FCM.
+     * 
+     * @param request  Data object with FCM push information
+     * 
+     * @throws ExecutionException
+     * @throws InterruptedException
+     * 
+     * @see com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest
+     * @see com.wine.to.up.notification.service.mobile.NotificationSender
+     */
     @Override
     public void sendMessage(FcmPushNotificationRequest request)
             throws InterruptedException, ExecutionException {

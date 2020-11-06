@@ -10,6 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
+/**
+ * A data class containing information for sending FCM push notifications.
+ */
 public class FcmPushNotificationRequest {
     private String title;
     private String message;

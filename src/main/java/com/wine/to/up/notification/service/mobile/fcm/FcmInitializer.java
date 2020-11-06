@@ -14,6 +14,12 @@ import java.io.IOException;
 
 @Service
 @Slf4j
+/**
+ * Initializes FirebaseApp with creds from file specified in application.properties
+ * through the `app.firebase-configuration-file` setting.
+ * FirebaseApp is later used for sending pushes to Android in FcmService.
+ * @see com.wine.to.up.notification.service.mobile.fcm.FcmService
+ */
 public class FcmInitializer {
     @Value("${app.firebase-configuration-file}")
     private String firebaseConfigPath;
