@@ -25,7 +25,7 @@ public class CatalogKafkaMessageHandler {
     public void handle(CatalogMessage catalogMessage) {
         log.info("Message received:{}", catalogMessage.toString());
         try {
-            notificationSender.sendMessage(new FcmPushNotificationRequest("title", "message", "token"));
+            notificationSender.sendMessage(new FcmPushNotificationRequest(catalogMessage.getTitle(), Long.toString(catalogMessage.getId()), "token"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

@@ -20,3 +20,4 @@ gradlew*
 .DS_Store
 .classpath
 bin
+/src/main/resources/var/

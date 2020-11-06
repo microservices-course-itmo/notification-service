@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 public class CatalogMessage {
-    private String id;
+    private Long id;
     private String title;
-    private String price;
+    private Float price;
 }
