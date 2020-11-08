@@ -1,7 +1,7 @@
 package com.wine.to.up.notification.service.configuration;
 
 
-import com.wine.to.up.user.service.api.dto.WineResponse;
+import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -29,7 +29,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<?> batchFactory() {
-        ConcurrentKafkaListenerContainerFactory<Long, WineResponse> factory =
+        ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setBatchListener(true);
@@ -39,7 +39,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<?> singleFactory() {
-        ConcurrentKafkaListenerContainerFactory<Long, WineResponse> factory =
+        ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setBatchListener(false);
@@ -48,7 +48,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<Long, WineResponse> consumerFactory() {
+    public ConsumerFactory<Long, WinePriceUpdatedResponse> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 

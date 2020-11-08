@@ -24,6 +24,9 @@ public class FcmInitializer {
     @Value("${app.firebase-configuration-file}")
     private String firebaseConfigPath;
 
+    @Value("${app.firebase-db-url}")
+    private String firebaseDbUrl;
+
     @PostConstruct
     public void initialize() {
         try {
@@ -31,7 +34,7 @@ public class FcmInitializer {
                     .setCredentials(GoogleCredentials
                             .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
 
-                    ).setDatabaseUrl("https://wineup-android.firebaseio.com")
+                    ).setDatabaseUrl(firebaseDbUrl)
                 .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
