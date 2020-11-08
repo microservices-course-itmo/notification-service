@@ -1,6 +1,7 @@
 package com.wine.to.up.notification.service.controller;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
+import com.wine.to.up.notification.service.DTO.NotificationDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,13 @@ public class NotificationController {
     }
 
     @PutMapping(value = "/")
-    public void updateNotification(@RequestBody Notification notification) {
-        notificationRepository.save(notification);
+    public void updateNotification(@RequestBody NotificationDTO notification) {
+        Notification persistentNotification = new Notification();
+        persistentNotification.setId(notification.getId());
+        persistentNotification.setMessage(notification.getMessage());
+        persistentNotification.setType(notification.getType());
+        persistentNotification.setUserId(notification.getUserId());
+        notificationRepository.save(persistentNotification);
     }
 
     @GetMapping(value = "/{id}")
@@ -41,8 +47,13 @@ public class NotificationController {
     }
 
     @DeleteMapping(value = "/")
-    public void deleteNotification(@RequestBody Notification notification) {
-        notificationRepository.delete(notification);
+    public void deleteNotification(@RequestBody NotificationDTO notification) {
+        Notification persistentNotification = new Notification();
+        persistentNotification.setId(notification.getId());
+        persistentNotification.setMessage(notification.getMessage());
+        persistentNotification.setType(notification.getType());
+        persistentNotification.setUserId(notification.getUserId());
+        notificationRepository.delete(persistentNotification);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -51,7 +62,12 @@ public class NotificationController {
     }
 
     @PostMapping(value = "/")
-    public void createNotification(@RequestBody Notification notification) {
-        notificationRepository.save(notification);
+    public void createNotification(@RequestBody NotificationDTO notification) {
+        Notification persistentNotification = new Notification();
+        persistentNotification.setId(notification.getId());
+        persistentNotification.setMessage(notification.getMessage());
+        persistentNotification.setType(notification.getType());
+        persistentNotification.setUserId(notification.getUserId());
+        notificationRepository.save(persistentNotification);
     }
 }

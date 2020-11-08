@@ -88,6 +88,7 @@ public class KafkaController {
                         return f.get();
                     } catch (InterruptedException | ExecutionException e) {
                         log.error("Error while sending in Kafka ", e);
+                        Thread.currentThread().interrupt();
                         return 0;
                     }
                 })
