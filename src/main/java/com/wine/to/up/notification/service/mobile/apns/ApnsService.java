@@ -69,7 +69,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      */
     public void sendMessage(ApnsPushNotificationRequest request)
             throws ExecutionException, InterruptedException {
-        log.info("Sending notification to device: " + request.getDeviceToken());
+        log.info("Sending notification to device: {}", request.getDeviceToken());
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
