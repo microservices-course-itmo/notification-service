@@ -12,4 +12,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class NotificationServiceMetricsCollector extends CommonMetricsCollector {
+    private static final String SERVICE_NAME = "notification_service";
+
+    public NotificationServiceMetricsCollector() {
+        this(SERVICE_NAME);
+    }
+
+    public NotificationServiceMetricsCollector(String serviceName) {
+        super(serviceName);
+    }
 }

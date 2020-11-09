@@ -3,7 +3,7 @@ package com.wine.to.up.notification.service.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import java.util.List;
-
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
@@ -21,6 +22,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class NotificationControllerIntegrationTest {
+
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
+
     @Autowired
     private NotificationRepository notificationRepository;
 
