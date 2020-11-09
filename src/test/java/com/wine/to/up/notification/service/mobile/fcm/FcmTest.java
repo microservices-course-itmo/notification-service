@@ -5,6 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,9 +26,17 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class FcmTest {
     private FcmService fcmService = new FcmService();
 
+    @Before
+    public void initializeTestFcm() {
+        FirebaseOptions options = FirebaseOptions.builder()
+            .setProjectId("project-id-1")
+            .setCredentials(new MockGoogleCredentials())
+            .build();
+        FirebaseApp.initializeApp(options);
+    }
+
     @Test
     public void testSendMessage(){
-
         FcmPushNotificationRequest fcmPushNotificationRequest = new FcmPushNotificationRequest();
         fcmPushNotificationRequest.setTitle("sample");
         fcmPushNotificationRequest.setMessage("sample");
@@ -38,6 +47,20 @@ public class FcmTest {
         });
 
         assertThat(thrown).isInstanceOf(ExecutionException.class)
-                .hasMessageContaining("The registration token is not a valid FCM registration token");
+                .hasMessageContaining("401");  // Because we're using mock creds
     }
+
+    /**
+     * Recommended way to test Firebase apps.
+     * That's how it's actually done in firebase-admin tests.
+     */
+    private static class MockGoogleCredentials extends GoogleCredentials {
+
+        @Override
+        public AccessToken refreshAccessToken() {
+            Date expiry = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
+            return new AccessToken(UUID.randomUUID().toString(), expiry);
+        }
+    }
+
 }
