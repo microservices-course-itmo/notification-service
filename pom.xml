@@ -164,7 +164,6 @@
                     <append>true</append>
                     <excludes>
                         <exclude>*MethodAccess</exclude>
-                        <exclude>**/CatalogMessageTest.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
