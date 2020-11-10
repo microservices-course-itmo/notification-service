@@ -7,13 +7,13 @@ import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
-@Service
+//@Service
 @Slf4j
 /**
  * A service used to send push notifications to Apple devices
