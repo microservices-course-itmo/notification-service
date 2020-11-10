@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThrows;
 import java.util.List;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
+import com.wine.to.up.notification.service.DTO.NotificationDTO;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
@@ -48,7 +49,7 @@ public class NotificationControllerIntegrationTest {
 
     @Test
     public void testPutNotification() {
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setId(2);
         notification.setMessage("testPut");
         notification.setType(NotificationType.UI);
@@ -62,7 +63,7 @@ public class NotificationControllerIntegrationTest {
 
     @Test
     public void testGetNotificationByUserId() {
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setId(3);
         notification.setMessage("testGetByUserId");
         notification.setType(NotificationType.UI);
@@ -76,7 +77,7 @@ public class NotificationControllerIntegrationTest {
 
     @Test
     public void testUpdateNotification() {
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setId(4);
         notification.setMessage("foo");
         notification.setType(NotificationType.UI);
@@ -92,7 +93,7 @@ public class NotificationControllerIntegrationTest {
 
     @Test
     public void testDeleteNotification() {
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setId(5);
         notification.setMessage("foo");
         notification.setType(NotificationType.UI);
@@ -112,7 +113,7 @@ public class NotificationControllerIntegrationTest {
 
     @Test
     public void testDeleteNotificationById() {
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setId(6);
         notification.setMessage("foo");
         notification.setType(NotificationType.UI);

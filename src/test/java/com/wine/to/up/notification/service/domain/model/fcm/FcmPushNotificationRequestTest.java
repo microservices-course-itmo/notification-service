@@ -15,7 +15,7 @@ public class FcmPushNotificationRequestTest {
     @Test
     public void testNoArgsConstructor() {
         FcmPushNotificationRequest FcmPushNotificationRequest = new FcmPushNotificationRequest();
-        assertThat(FcmPushNotificationRequest.getTitle()).isEqualTo(null);
+        assertThat(FcmPushNotificationRequest.getTitle()).isNull();
     }
 
     @Test

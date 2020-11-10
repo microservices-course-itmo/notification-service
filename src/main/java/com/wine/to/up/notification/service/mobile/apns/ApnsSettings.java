@@ -1,6 +1,5 @@
 package com.wine.to.up.notification.service.mobile.apns;
 
-
 import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import lombok.Getter;
 import lombok.Setter;

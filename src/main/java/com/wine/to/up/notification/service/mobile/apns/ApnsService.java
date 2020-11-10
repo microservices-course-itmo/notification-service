@@ -74,7 +74,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
         PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
-        log.info("Sent message to device: " + request.getDeviceToken() + ", " + response.toString());
+        log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
     }
 
 }

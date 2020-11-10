@@ -15,7 +15,7 @@ public class CatalogMessageTest {
     @Test
     public void testNoArgsConstructor() {
         CatalogMessage catalogMessage = new CatalogMessage();
-        assertThat(catalogMessage.getTitle()).isEqualTo(null);
+        assertThat(catalogMessage.getTitle()).isNull();
     }
 
     @Test
@@ -59,6 +59,6 @@ public class CatalogMessageTest {
         String title = "testTitle";
         Float price = 1.0F;
         CatalogMessage catalogMessage = new CatalogMessage(id, title, price);
-        assertThat(catalogMessage.toString()).isEqualTo("CatalogMessage(id=" + id + ", title=" + title + ", price=" + price + ")");
+        assertThat(catalogMessage).hasToString("CatalogMessage(id=" + id + ", title=" + title + ", price=" + price + ")");
     }
 }

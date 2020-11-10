@@ -62,5 +62,4 @@ public class FcmTest {
             return new AccessToken(UUID.randomUUID().toString(), expiry);
         }
     }
-
 }
