@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 //@Service
+// ^ This annotation needs to be commented until we get a valid certificate from iOS team,
+// otherwise the app will fail to run
 @Slf4j
 /**
  * A service used to send push notifications to Apple devices
