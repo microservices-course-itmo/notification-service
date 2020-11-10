@@ -86,15 +86,18 @@ public class KafkaController {
                 .map(f -> {
                     try {
                         return f.get();
-                    } catch (InterruptedException | ExecutionException e) {
+                    } catch (InterruptedException e) {
                         log.error("Error while sending in Kafka ", e);
                         Thread.currentThread().interrupt();
+                        return 0;
+                    } catch (ExecutionException e) {
+                        log.error("Error while sending in Kafka ", e);
                         return 0;
                     }
                 })
                 .mapToInt(Integer::intValue)
                 .sum();
 
-        log.info("Sent: " + sent);
+        log.info("Sent: {}", sent);
     }
 }
