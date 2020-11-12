@@ -7,17 +7,18 @@ import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
-@Service
 @Slf4j
 /**
  * A service used to send push notifications to Apple devices
  * through Apple Push Notification Service (APNS).
+ * 
+ * Needs @Service anno once we get APNS credentials.
+ * 
  * Uses ApnsSettings to load credentials from application.properties.
  * @see com.wine.to.up.notification.service.mobile.apns.ApnsSettings
  */
@@ -74,7 +75,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
                 request.getDeviceToken(), request.getTopic(), request.getPayload()
         );
         PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
-        log.info("Sent message to device: " + request.getDeviceToken() + ", " + response.toString());
+        log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
     }
 
 }

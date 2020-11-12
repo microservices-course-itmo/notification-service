@@ -58,7 +58,10 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
             }
         } catch (JsonProcessingException e) {
             log.error("Could not parse Kafka message from User Service", e);
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (InterruptedException ex) {
+            log.error("Failed to send notification", ex);
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException ex) {
             log.error("Failed to send notification", ex);
         }
 

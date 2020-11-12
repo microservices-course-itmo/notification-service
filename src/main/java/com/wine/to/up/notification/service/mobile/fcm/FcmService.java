@@ -42,7 +42,7 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
             throws InterruptedException, ExecutionException {
         Message message = getPreconfiguredMessage(request);
         String response = sendAndGetResponse(message);
-        log.debug("Sent message without data. " + response);
+        log.debug("Sent message without data. Token: {}, {}", request.getClientToken(), response);
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
