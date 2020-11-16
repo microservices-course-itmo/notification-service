@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.DTO;
+package com.wine.to.up.notification.service.dto;
 
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import lombok.Getter;

@@ -12,6 +12,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 
@@ -28,7 +29,7 @@ public class KafkaConsumerConfig {
     private String kafkaGroupId;
 
     @Bean
-    public KafkaListenerContainerFactory<?> batchFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> batchFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
@@ -38,7 +39,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<?> singleFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> singleFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
@@ -53,7 +54,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<?> kafkaListenerContainerFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> kafkaListenerContainerFactory() {
         return new ConcurrentKafkaListenerContainerFactory<>();
     }
 
