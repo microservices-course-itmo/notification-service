@@ -21,6 +21,8 @@
         <service.commonlib.version>0.2.2-SNAPSHOT</service.commonlib.version>
         <service.firebase.version>6.8.1</service.firebase.version>
         <service.pushy.version>0.14.1</service.pushy.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <user-service-api.version>0.1.2-SNAPSHOT</user-service-api.version>
 
         <notification.service.api.version>0.1.0-SNAPSHOT</notification.service.api.version>
@@ -100,6 +102,18 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <!-- Required: Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger-ui.version}</version>
         </dependency>
 
         <!-- for tests -->

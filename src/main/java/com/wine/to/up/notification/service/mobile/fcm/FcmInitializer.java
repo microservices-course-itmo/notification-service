@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 
 @Service
@@ -27,12 +28,17 @@ public class FcmInitializer {
     @Value("${app.firebase-db-url}")
     private String firebaseDbUrl;
 
+    @Value("${app.firebase-decrypt-password}")
+    private String secretKey;
+
     @PostConstruct
     public void initialize() {
         try {
+            String decryptedFilePath = FileDecryptor.decryptFile(firebaseConfigPath, secretKey);
+
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials
-                            .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                            .fromStream(new ClassPathResource(decryptedFilePath).getInputStream())
 
                     ).setDatabaseUrl(firebaseDbUrl)
                 .build();
@@ -46,6 +52,8 @@ public class FcmInitializer {
             }
         } catch (IOException e) {
             log.error("Error opening service account file!", e);
+        } catch (GeneralSecurityException e) {
+            log.error("Unexpected security error occurred!", e);
         }
     }
 }
