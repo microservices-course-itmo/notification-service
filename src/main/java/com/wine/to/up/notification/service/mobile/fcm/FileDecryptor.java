@@ -28,7 +28,6 @@ public class FileDecryptor {
         return cipher;
     }
 
-
     public static String decryptFile(String fileName, String password)
             throws GeneralSecurityException, IOException{
         byte[] encData;
