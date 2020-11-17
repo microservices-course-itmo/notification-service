@@ -5,30 +5,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wine.to.up.commonlib.messaging.KafkaMessageHandler;
 import com.wine.to.up.notification.service.api.message.KafkaMessageSentEventOuterClass.KafkaMessageSentEvent;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
-import com.wine.to.up.notification.service.domain.model.kafka.CatalogMessage;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.apns.ApnsSettings;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import com.wine.to.up.user.service.api.dto.UserTokens;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
 @Slf4j
+@Getter
 public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<KafkaMessageSentEvent> {
 
-    private NotificationSender notificationSender;
+    private NotificationSender<FcmPushNotificationRequest> notificationSender;
 
     @Autowired
-    public UserServiceKafkaMessageHandler(NotificationSender notificationSender) {
+    public UserServiceKafkaMessageHandler(NotificationSender<FcmPushNotificationRequest> notificationSender) {
         this.notificationSender = notificationSender;
     }
 
