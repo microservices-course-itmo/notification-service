@@ -31,8 +31,14 @@ public class Notification {
     @Enumerated(EnumType.ORDINAL)
     private NotificationType type;
 
+    @Column(name = "timestamp")
+    private int timestamp;
+
     @Column(name = "user_id")
     private long userId;
+
+    @Column(name = "wine_id")
+    private long wineId;
 
 }
 
