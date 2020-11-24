@@ -65,13 +65,13 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
             FcmService fcmService = new FcmService();
             if (!userTokens.getIosTokens().isEmpty()) {
                 for (String token : userTokens.getIosTokens()) {
-                    Notification notification = Notification.newBuilder()
-                            .setMessage(payload)
-                            .setCurrentTime()
-                            .setTypeId(NotificationType.WINE_PRICE_UPDATED)
-                            .setWineId(Long.parseLong(wineResponse.getWineId()))
-                            .setUserId(userTokens.getUserId())
+                    Notification notification = Notification.builder()
+                            .message(payload)
+                            .type(NotificationType.WINE_PRICE_UPDATED)
+                            .wineId(Long.parseLong(wineResponse.getWineId()))
+                            .userId(userTokens.getUserId())
                             .build();
+                    notification.setCurrentTime();
                     this.notificationRepository.save(notification);
 
                     apnsService.sendMessage(new ApnsPushNotificationRequest(token, "default", payload));
@@ -80,13 +80,13 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
 
             if (!userTokens.getFcmTokens().isEmpty()) {
                 for (String token : userTokens.getFcmTokens()) {
-                    Notification notification = Notification.newBuilder()
-                            .setMessage(message)
-                            .setCurrentTime()
-                            .setTypeId(NotificationType.WINE_PRICE_UPDATED)
-                            .setWineId(Long.parseLong(wineResponse.getWineId()))
-                            .setUserId(userTokens.getUserId())
+                    Notification notification = Notification.builder()
+                            .message(message)
+                            .type(NotificationType.WINE_PRICE_UPDATED)
+                            .wineId(Long.parseLong(wineResponse.getWineId()))
+                            .userId(userTokens.getUserId())
                             .build();
+                    notification.setCurrentTime();
                     this.notificationRepository.save(notification);
 
                     fcmService.sendMessage(new FcmPushNotificationRequest("New discount on " + wineResponse.getWineName() + "!", message, token));

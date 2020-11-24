@@ -1,5 +1,6 @@
 package com.wine.to.up.notification.service.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Table(name = "notification")
 @Setter
 @Getter
+@Builder
 @NoArgsConstructor
 public class Notification {
 
@@ -43,42 +45,9 @@ public class Notification {
     @Column(name = "wine_id")
     private long wineId;
 
-    public static Builder newBuilder() {
-        return new Notification().new Builder();
-    }
-
-    public class Builder {
-        private Builder() {}
-
-        public Builder setUserId(long userId) {
-            Notification.this.userId = userId;
-            return this;
-        }
-
-        public Builder setMessage(String message) {
-            Notification.this.message = message;
-            return this;
-        }
-
-        public Builder setTypeId(NotificationType type) {
-            Notification.this.type = type;
-            return this;
-        }
-
-        public Builder setWineId(long wineId) {
-            Notification.this.wineId = wineId;
-            return this;
-        }
-
-        public Builder setCurrentTime() {
-            Date date = new Date();
-            Notification.this.timestamp = new Timestamp(date.getTime());
-            return this;
-        }
-
-        public Notification build() {
-            return Notification.this;
-        }
+    public void setCurrentTime() {
+        Date date = new Date();
+        this.timestamp = new Timestamp(date.getTime());
     }
 }
 
