@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends CrudRepository<Notification, Long> {
-    List<Notification> findAllByUserId(long userId);
+    List<Notification> findAllByUserIdOrderByTimestampDesc(long userId);
 }

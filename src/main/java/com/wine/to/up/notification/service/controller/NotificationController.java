@@ -47,7 +47,7 @@ public class NotificationController {
     @ResponseBody
     public List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
         log.debug("New notification CRUD request. Action = GET. user_id = {}",id);
-        return notificationRepository.findAllByUserId(id);
+        return notificationRepository.findAllByUserIdOrderByTimestampDesc(id);
     }
 
     @DeleteMapping(value = "/")

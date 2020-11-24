@@ -12,5 +12,7 @@ public class NotificationDTO {
     private long id;
     private String message;
     private NotificationType type;
+    private int timestamp;
     private long userId;
+    private long wineId;
 }

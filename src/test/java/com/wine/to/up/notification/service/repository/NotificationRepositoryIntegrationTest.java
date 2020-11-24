@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,8 +27,10 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(1);
         notification.setMessage("testGetById");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -40,8 +44,10 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(2);
         notification.setMessage("testPut");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -55,12 +61,14 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(3);
         notification.setMessage("testGetByUserId");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(6);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
-        List<Notification> found = notificationRepository.findAllByUserId(6L);
+        List<Notification> found = notificationRepository.findAllByUserIdOrderByTimestampDesc(6L);
         assertThat(found.get(0).getMessage()).isEqualTo("testGetByUserId");
     }
 
@@ -69,8 +77,10 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(4);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
         notification.setMessage("bar");
@@ -86,8 +96,10 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(5);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -106,8 +118,10 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(6);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
