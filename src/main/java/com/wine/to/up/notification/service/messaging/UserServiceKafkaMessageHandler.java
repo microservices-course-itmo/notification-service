@@ -12,6 +12,7 @@ import com.wine.to.up.notification.service.mobile.NotificationSender;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.apns.ApnsSettings;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
+import com.wine.to.up.notification.service.repository.NotificationRepository;
 import com.wine.to.up.user.service.api.dto.UserTokens;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
     private NotificationSender<FcmPushNotificationRequest> notificationSender;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     public UserServiceKafkaMessageHandler(NotificationSender<FcmPushNotificationRequest> notificationSender) {
         this.notificationSender = notificationSender;
     }
@@ -41,7 +45,7 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
         try {
             wineResponse = new ObjectMapper().readValue(message.getMessage(), WinePriceUpdatedResponse.class);
             log.info("Message received:{}", wineResponse);
-            sendDiscountNotifications(wineResponse);
+            this.sendDiscountNotifications(wineResponse);
         } catch (JsonProcessingException e) {
             log.error("Could not parse Kafka message from User Service", e);
         } catch (InterruptedException ex) {
@@ -52,7 +56,7 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
         }
     }
 
-    private static void sendDiscountNotifications(WinePriceUpdatedResponse wineResponse) throws ExecutionException, InterruptedException {
+    private void sendDiscountNotifications(WinePriceUpdatedResponse wineResponse) throws ExecutionException, InterruptedException {
         String payload = "New discount on " + wineResponse.getWineName() + "! New price is: " + wineResponse.getNewWinePrice();
         String message = "New price is: " + wineResponse.getNewWinePrice();
 
@@ -61,13 +65,14 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
             FcmService fcmService = new FcmService();
             if (!userTokens.getIosTokens().isEmpty()) {
                 for (String token : userTokens.getIosTokens()) {
-                    Notification.newBuilder()
+                    Notification notification = Notification.newBuilder()
                             .setMessage(payload)
                             .setCurrentTime()
                             .setTypeId(NotificationType.WINE_PRICE_UPDATED)
                             .setWineId(Long.parseLong(wineResponse.getWineId()))
                             .setUserId(userTokens.getUserId())
                             .build();
+                    this.notificationRepository.save(notification);
 
                     apnsService.sendMessage(new ApnsPushNotificationRequest(token, "default", payload));
                 }
@@ -75,13 +80,14 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
 
             if (!userTokens.getFcmTokens().isEmpty()) {
                 for (String token : userTokens.getFcmTokens()) {
-                    Notification.newBuilder()
+                    Notification notification = Notification.newBuilder()
                             .setMessage(message)
                             .setCurrentTime()
                             .setTypeId(NotificationType.WINE_PRICE_UPDATED)
                             .setWineId(Long.parseLong(wineResponse.getWineId()))
                             .setUserId(userTokens.getUserId())
                             .build();
+                    this.notificationRepository.save(notification);
 
                     fcmService.sendMessage(new FcmPushNotificationRequest("New discount on " + wineResponse.getWineName() + "!", message, token));
                 }
