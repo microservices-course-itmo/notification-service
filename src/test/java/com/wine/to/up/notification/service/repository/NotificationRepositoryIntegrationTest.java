@@ -25,7 +25,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(1);
         notification.setMessage("testGetById");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -40,7 +40,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(2);
         notification.setMessage("testPut");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -55,7 +55,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(3);
         notification.setMessage("testGetByUserId");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(6);
 
         notificationRepository.save(notification);
@@ -69,7 +69,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(4);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -86,7 +86,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(5);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
@@ -106,7 +106,7 @@ public class NotificationRepositoryIntegrationTest {
         Notification notification = new Notification();
         notification.setId(6);
         notification.setMessage("foo");
-        notification.setType(NotificationType.UI);
+        notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
         notificationRepository.save(notification);
