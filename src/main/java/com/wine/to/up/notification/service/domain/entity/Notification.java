@@ -1,9 +1,6 @@
 package com.wine.to.up.notification.service.domain.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +16,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "notification")
+@Builder
 @Setter
 @Getter
-@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Notification {
 
     @Id
