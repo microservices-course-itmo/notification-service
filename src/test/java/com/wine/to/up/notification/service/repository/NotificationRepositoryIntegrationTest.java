@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +29,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("testGetById");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -42,6 +46,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("testPut");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -57,6 +63,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("testGetByUserId");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(6);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -71,6 +79,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
         notification.setMessage("bar");
@@ -88,6 +98,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
@@ -108,6 +120,8 @@ public class NotificationRepositoryIntegrationTest {
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
+        notification.setWineId(33);
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
 
