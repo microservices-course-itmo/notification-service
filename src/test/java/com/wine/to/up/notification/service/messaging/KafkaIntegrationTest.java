@@ -20,13 +20,10 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore  // until we have configured Kafka on CI
+@Ignore // until we configure kafka on CI
 public class KafkaIntegrationTest {
     @Autowired
     private KafkaTemplate<Long, WinePriceUpdatedResponse> kafkaTemplate;
-
-    @MockBean
-    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
 
     private boolean testPassed = false;
 
