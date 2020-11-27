@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 @Component
 @Slf4j
 @Getter
-public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<KafkaMessageSentEvent> {
+public class UserServiceKafkaMessageHandler {
 
     private NotificationSender<FcmPushNotificationRequest> notificationSender;
 
@@ -38,17 +38,13 @@ public class UserServiceKafkaMessageHandler implements KafkaMessageHandler<Kafka
         this.notificationSender = notificationSender;
     }
 
-    @Override
-    @KafkaListener(id = "user-service-topic-listener", topics = {"wine-response-topic"}, containerFactory = "batchFactory")
-    public void handle(KafkaMessageSentEvent message) {
-        final WinePriceUpdatedResponse wineResponse;
+    @KafkaListener(id = "user-service-topic-listener", topics = {"wine-response-topic"}, containerFactory = "singleFactory")
+    public void handle(WinePriceUpdatedResponse wineResponse) {
         try {
-            wineResponse = new ObjectMapper().readValue(message.getMessage(), WinePriceUpdatedResponse.class);
             log.info("Message received:{}", wineResponse);
             this.sendDiscountNotifications(wineResponse);
-        } catch (JsonProcessingException e) {
-            log.error("Could not parse Kafka message from User Service", e);
-        } catch (InterruptedException ex) {
+        }
+        catch (InterruptedException ex) {
             log.error("Failed to send notification", ex);
             Thread.currentThread().interrupt();
         } catch (ExecutionException ex) {

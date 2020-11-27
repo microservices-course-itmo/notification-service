@@ -29,21 +29,10 @@ public class KafkaConsumerConfig {
     private String kafkaGroupId;
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> batchFactory() {
-        ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        factory.setBatchListener(true);
-        factory.setMessageConverter(new BatchMessagingMessageConverter(converter()));
-        return factory;
-    }
-
-    @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> singleFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, WinePriceUpdatedResponse> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setBatchListener(false);
         factory.setMessageConverter(new StringJsonMessageConverter());
         return factory;
     }
@@ -53,10 +42,6 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Long,WinePriceUpdatedResponse>> kafkaListenerContainerFactory() {
-        return new ConcurrentKafkaListenerContainerFactory<>();
-    }
 
     @Bean
     public Map<String, Object> consumerConfigs() {
@@ -69,8 +54,4 @@ public class KafkaConsumerConfig {
         return props;
     }
 
-    @Bean
-    public StringJsonMessageConverter converter() {
-        return new StringJsonMessageConverter();
-    }
 }
