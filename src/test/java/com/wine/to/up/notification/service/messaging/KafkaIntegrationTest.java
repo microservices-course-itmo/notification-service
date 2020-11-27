@@ -30,6 +30,9 @@ public class KafkaIntegrationTest {
 
     private boolean testPassed = false;
 
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
+
     @Test
     public void test() {
         final WinePriceUpdatedResponse testWine = new WinePriceUpdatedResponse();
