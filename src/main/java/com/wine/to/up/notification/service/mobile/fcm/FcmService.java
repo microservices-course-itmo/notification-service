@@ -61,16 +61,6 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
         final String message = "New price is: " + winePriceUpdatedResponse.getNewWinePrice();
         winePriceUpdatedResponse.getUserTokens().forEach(t->{
             t.getFcmTokens().forEach(token->{
-
-                com.wine.to.up.notification.service.domain.entity.Notification notification=com.wine.to.up.notification.service.domain.entity.Notification.builder()
-                        .message(message)
-                        .type(NotificationType.WINE_PRICE_UPDATED)
-                        .wineId(Long.parseLong(winePriceUpdatedResponse.getWineId()))
-                        .userId(t.getUserId())
-                        .build();
-                notification.setCurrentTime();
-                //notificationRepository.save(notification);
-
                 final FcmPushNotificationRequest fcmPushNotificationRequest=new FcmPushNotificationRequest(payload,message,token);
                 try {
                     sendMessage(fcmPushNotificationRequest);
