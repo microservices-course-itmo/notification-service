@@ -6,13 +6,17 @@ import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
+import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
+@Service
 /**
  * A service used to send push notifications to Apple devices
  * through Apple Push Notification Service (APNS).
@@ -76,6 +80,11 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
         );
         PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
         log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
+    }
+
+    @Override
+    public void sendAll(WinePriceUpdatedResponse winePriceUpdatedResponse) {
+
     }
 
 }

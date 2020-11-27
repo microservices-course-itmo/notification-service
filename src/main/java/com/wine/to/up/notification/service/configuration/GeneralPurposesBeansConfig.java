@@ -27,8 +27,4 @@ public class GeneralPurposesBeansConfig {
         return new ObjectMapper();
     }
 
-    @Bean
-    public NotificationSender<FcmPushNotificationRequest> notificationSender(){
-        return new FcmService();
-    }
 }

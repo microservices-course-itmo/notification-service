@@ -34,11 +34,11 @@ public class FcmInitializer {
     @PostConstruct
     public void initialize() {
         try {
-            String decryptedFilePath = FileDecryptor.decryptFile(firebaseConfigPath, secretKey);
+            //String decryptedFilePath = FileDecryptor.decryptFile(firebaseConfigPath, secretKey);
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials
-                            .fromStream(new ClassPathResource(decryptedFilePath).getInputStream())
+                            .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
 
                     ).setDatabaseUrl(firebaseDbUrl)
                 .build();
@@ -52,8 +52,6 @@ public class FcmInitializer {
             }
         } catch (IOException e) {
             log.error("Error opening service account file!", e);
-        } catch (GeneralSecurityException e) {
-            log.error("Unexpected security error occurred!", e);
         }
     }
 }
