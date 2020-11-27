@@ -55,7 +55,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
             apnsClient = apnsClientBuilder.build();
 
             log.info("Successfully initialized APNS client");
-        } catch (URISyntaxException | IOException | NullPointerException e) {
+        } catch (URISyntaxException | IOException | NullPointerException | IllegalArgumentException e) {
             log.error("Error initializing APNS client", e);
         }
     }
