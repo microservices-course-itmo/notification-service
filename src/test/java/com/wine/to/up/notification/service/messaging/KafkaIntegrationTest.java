@@ -4,6 +4,7 @@ import com.wine.to.up.notification.service.ServiceApplication;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore  // until we have configured Kafka on CI
 public class KafkaIntegrationTest {
     @Autowired
     private KafkaTemplate<Long, WinePriceUpdatedResponse> kafkaTemplate;
