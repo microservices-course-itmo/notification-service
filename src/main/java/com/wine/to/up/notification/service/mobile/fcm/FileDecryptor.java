@@ -33,17 +33,17 @@ public class FileDecryptor {
             throws GeneralSecurityException, IOException{
         byte[] encData;
         byte[] decData;
-        File inFile = new ClassPathResource(fileName).getFile();
+        ClassPathResource inFile = new ClassPathResource(fileName);
 
         Cipher cipher = FileDecryptor.makeCipher(password);
 
-        FileInputStream stream = new FileInputStream(inFile);
-        encData = new byte[(int)inFile.length()];
+        InputStream stream = inFile.getInputStream();
+        encData = new byte[(int)inFile.contentLength()];
         stream.read(encData);
         stream.close();
         decData = cipher.doFinal(encData);
 
-        File decodedFile = File.createTempFile(inFile.getName(), null);
+        File decodedFile = File.createTempFile(inFile.getFilename(), null);
         FileOutputStream target = new FileOutputStream(decodedFile);
         target.write(decData);
         target.close();
