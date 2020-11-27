@@ -3,7 +3,9 @@ package com.wine.to.up.notification.service.controller;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.dto.NotificationDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
+import com.wine.to.up.notification.service.messaging.UserServiceKafkaMessageHandler;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
+import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -79,5 +81,13 @@ public class NotificationController {
         persistentNotification.setUserId(notification.getUserId());
         log.debug("Notification entry saved. id = {}",persistentNotification.getId());
         notificationRepository.save(persistentNotification);
+    }
+
+    @Autowired
+    private UserServiceKafkaMessageHandler userServiceKafkaMessageHandler;
+
+    @PostMapping(value = "/trigger_kafka_consumer")
+    public void triggerKafkaConsumer(@RequestBody WinePriceUpdatedResponse winePriceUpdatedResponse){
+        userServiceKafkaMessageHandler.handle(winePriceUpdatedResponse);
     }
 }
