@@ -20,6 +20,7 @@ public class UserServiceKafkaMessageHandler {
     private final ApnsService apnsService;
     private final NotificationServiceMetricsCollector metrics;
 
+
     @Autowired
     public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
         this.fcmService = fcmService;
