@@ -24,6 +24,14 @@ public class NotificationController {
         this.notificationRepository = notificationRepository;
     }
 
+    @GetMapping(value = "/prometheus")
+    public void checkPrometheus() {
+        log.debug("New get request on /prometheus");
+        // TODO:
+        //  [ ] increment some metric
+        //  [ ] assert we got this metric in prometheus
+    }
+
     @PutMapping(value = "/")
     public void updateNotification(@RequestBody NotificationDTO notification) {
         log.debug("New notification CRUD request. Action = UPDATE. id = {}",notification.getId());
