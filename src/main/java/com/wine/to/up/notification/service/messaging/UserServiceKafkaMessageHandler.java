@@ -25,6 +25,7 @@ public class UserServiceKafkaMessageHandler {
     public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
         this.fcmService = fcmService;
         this.apnsService = apnsService;
+
         this.metrics = metrics;
     }
 
