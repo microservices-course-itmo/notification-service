@@ -5,7 +5,6 @@ import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

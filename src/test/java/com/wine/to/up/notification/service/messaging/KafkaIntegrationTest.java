@@ -1,6 +1,5 @@
 package com.wine.to.up.notification.service.messaging;
 
-import com.wine.to.up.notification.service.ServiceApplication;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import org.junit.Assert;
@@ -10,13 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

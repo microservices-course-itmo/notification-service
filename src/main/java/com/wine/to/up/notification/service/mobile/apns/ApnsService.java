@@ -6,7 +6,6 @@ import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
-import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
