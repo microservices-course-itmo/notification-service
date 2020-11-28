@@ -18,14 +18,13 @@ public class UserServiceKafkaMessageHandler {
     // private final NotificationSender<FcmPushNotificationRequest> notificationSender;
     private final FcmService fcmService;
     private final ApnsService apnsService;
+    private final NotificationServiceMetricsCollector metrics;
 
     @Autowired
-    private NotificationServiceMetricsCollector metrics;
-
-    @Autowired
-    public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService) {
+    public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
         this.fcmService = fcmService;
         this.apnsService = apnsService;
+        this.metrics = metrics;
     }
 
     @KafkaListener(id = "user-service-topic-listener",

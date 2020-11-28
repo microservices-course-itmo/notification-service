@@ -23,8 +23,6 @@ public class NotificationController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Autowired
-    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
 
     public NotificationController(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
