@@ -18,6 +18,7 @@ public class UserServiceKafkaMessageHandler {
     // private final NotificationSender<FcmPushNotificationRequest> notificationSender;
     private final FcmService fcmService;
     private final ApnsService apnsService;
+
     private final NotificationServiceMetricsCollector metrics;
 
 
@@ -25,7 +26,6 @@ public class UserServiceKafkaMessageHandler {
     public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
         this.fcmService = fcmService;
         this.apnsService = apnsService;
-
         this.metrics = metrics;
     }
 
