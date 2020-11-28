@@ -7,6 +7,7 @@ import com.wine.to.up.notification.service.mobile.NotificationSender;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
 import com.wine.to.up.user.service.api.dto.UserTokens;
 import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,12 +56,12 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
     }
 
     @Override
-    public void sendAll(WinePriceUpdatedResponse winePriceUpdatedResponse) {
-        final String payload = "New discount on " + winePriceUpdatedResponse.getWineName()
-                + "! New price is: " + winePriceUpdatedResponse.getNewWinePrice();
-        final String message = "New price is: " + winePriceUpdatedResponse.getNewWinePrice();
-        winePriceUpdatedResponse.getUserTokens().forEach(t->{
-            t.getFcmTokens().forEach(token->{
+    public void sendAll(WinePriceUpdatedWithTokensEvent event) {
+        final String payload = "New discount on " + event.getWineName()
+                + "! New price is: " + event.getNewWinePrice();
+        final String message = "New price is: " + event.getNewWinePrice();
+        event.getUserTokensList().forEach(t->{
+            t.getFcmTokensList().forEach(token->{
                 final FcmPushNotificationRequest fcmPushNotificationRequest=new FcmPushNotificationRequest(payload,message,token);
                 try {
                     sendMessage(fcmPushNotificationRequest);
