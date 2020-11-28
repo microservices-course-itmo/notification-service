@@ -1,5 +1,6 @@
 package com.wine.to.up.notification.service.messaging;
 
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import lombok.Getter;
@@ -19,6 +20,9 @@ public class UserServiceKafkaMessageHandler {
     private final ApnsService apnsService;
 
     @Autowired
+    private NotificationServiceMetricsCollector metrics;
+
+    @Autowired
     public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService) {
         this.fcmService = fcmService;
         this.apnsService = apnsService;
@@ -29,6 +33,8 @@ public class UserServiceKafkaMessageHandler {
             containerFactory = "singleFactory")
     public void handle(WinePriceUpdatedWithTokensEvent event) {
         log.info("Message received:{}", event);
+        metrics.messagesReceivedInc();
+
         fcmService.sendAll(event);
     }
 

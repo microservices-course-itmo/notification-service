@@ -1,5 +1,6 @@
 package com.wine.to.up.notification.service.controller;
 
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.dto.NotificationDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
@@ -22,16 +23,11 @@ public class NotificationController {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
+
     public NotificationController(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
-    }
-
-    @GetMapping(value = "/prometheus")
-    public void checkPrometheus() {
-        log.debug("New get request on /prometheus");
-        // TODO:
-        //  [ ] increment some metric
-        //  [ ] assert we got this metric in prometheus
     }
 
     @PutMapping(value = "/")
