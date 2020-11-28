@@ -38,8 +38,7 @@ public class FileDecryptor {
         Cipher cipher = FileDecryptor.makeCipher(password);
 
         InputStream stream = inFile.getInputStream();
-        encData = new byte[(int)inFile.contentLength()];
-        stream.read(encData);
+        encData = stream.readAllBytes();
         stream.close();
         decData = cipher.doFinal(encData);
 
@@ -51,5 +50,3 @@ public class FileDecryptor {
         return decodedFile;
     }
 }
-
-
