@@ -13,6 +13,7 @@ import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.apns.ApnsSettings;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
+import com.wine.to.up.user.service.api.UserServiceApiProperties;
 import com.wine.to.up.user.service.api.dto.UserTokens;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +29,19 @@ import java.util.concurrent.ExecutionException;
 @Getter
 public class UserServiceKafkaMessageHandler {
 
-    //private final NotificationSender<FcmPushNotificationRequest> notificationSender;
+    // private final NotificationSender<FcmPushNotificationRequest> notificationSender;
     private final FcmService fcmService;
     private final ApnsService apnsService;
 
     @Autowired
     public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService) {
-        this.fcmService=fcmService;
-        this.apnsService=apnsService;
+        this.fcmService = fcmService;
+        this.apnsService = apnsService;
     }
 
-    @KafkaListener(id = "user-service-topic-listener", topics = {"wine-response-topic"}, containerFactory = "singleFactory")
+    @KafkaListener(id = "user-service-topic-listener",
+            topics = {"user-service-wine-price-updated-with-tokens"},
+            containerFactory = "singleFactory")
     public void handle(WinePriceUpdatedResponse wineResponse) {
         log.info("Message received:{}", wineResponse);
         fcmService.sendAll(wineResponse);
