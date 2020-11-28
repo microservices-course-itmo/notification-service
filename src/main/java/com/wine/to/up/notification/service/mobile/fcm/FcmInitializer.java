@@ -5,10 +5,11 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -34,12 +35,11 @@ public class FcmInitializer {
     @PostConstruct
     public void initialize() {
         try {
-            String decryptedFilePath = FileDecryptor.decryptFile(firebaseConfigPath, secretKey);
+            File decryptedFile = FileDecryptor.decryptFile(firebaseConfigPath, secretKey);
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials
-                            .fromStream(new ClassPathResource(decryptedFilePath).getInputStream())
-
+                            .fromStream(new FileInputStream(decryptedFile))
                     ).setDatabaseUrl(firebaseDbUrl)
                 .build();
 

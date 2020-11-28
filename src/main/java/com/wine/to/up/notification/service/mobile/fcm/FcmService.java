@@ -2,12 +2,18 @@ package com.wine.to.up.notification.service.mobile.fcm;
 
 import com.google.firebase.messaging.*;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
+import com.wine.to.up.notification.service.domain.util.NotificationType;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
+import com.wine.to.up.notification.service.repository.NotificationRepository;
+import com.wine.to.up.user.service.api.dto.UserTokens;
+import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -22,10 +28,14 @@ import java.util.concurrent.ExecutionException;
 public class FcmService implements NotificationSender<FcmPushNotificationRequest> {
 
     @Value("${app.notifications.defaults:token}")
-
     private String defaultToken;
 
-    
+    private final NotificationRepository notificationRepository;
+
+    @Autowired
+    public FcmService(NotificationRepository notificationRepository){
+        this.notificationRepository=notificationRepository;
+    }
     /**
      * Implementation of NotificationSender's sendMessage for FCM.
      * 
@@ -43,6 +53,23 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
         Message message = getPreconfiguredMessage(request);
         String response = sendAndGetResponse(message);
         log.debug("Sent message without data. Token: {}, {}", request.getClientToken(), response);
+    }
+
+    @Override
+    public void sendAll(WinePriceUpdatedWithTokensEvent event) {
+        final String payload = "New discount on " + event.getWineName()
+                + "! New price is: " + event.getNewWinePrice();
+        final String message = "New price is: " + event.getNewWinePrice();
+        event.getUserTokensList().forEach(t->{
+            t.getFcmTokensList().forEach(token->{
+                final FcmPushNotificationRequest fcmPushNotificationRequest=new FcmPushNotificationRequest(payload,message,token);
+                try {
+                    sendMessage(fcmPushNotificationRequest);
+                } catch (InterruptedException | ExecutionException e) {
+                    log.warn("Failed to send notification!{}",fcmPushNotificationRequest.toString());
+                }
+            });
+        });
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {

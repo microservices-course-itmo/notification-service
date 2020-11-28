@@ -23,7 +23,7 @@
         <service.pushy.version>0.14.1</service.pushy.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <user-service-api.version>0.1.2-SNAPSHOT</user-service-api.version>
+        <user-service-api.version>0.1.4-SNAPSHOT</user-service-api.version>
 
         <notification.service.api.version>0.1.0-SNAPSHOT</notification.service.api.version>
 
@@ -165,7 +165,7 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -198,5 +198,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
 </project>

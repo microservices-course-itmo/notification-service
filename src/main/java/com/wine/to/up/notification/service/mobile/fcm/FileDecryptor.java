@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import org.springframework.core.io.ClassPathResource;
 
 public class FileDecryptor {
     private static final byte[] SALT = {
@@ -28,27 +29,24 @@ public class FileDecryptor {
         return cipher;
     }
 
-    public static String decryptFile(String fileName, String password)
+    public static File decryptFile(String fileName, String password)
             throws GeneralSecurityException, IOException{
         byte[] encData;
         byte[] decData;
-        File inFile = new File(fileName);
-        String decodedFilepath = fileName + ".decrypted";
+        ClassPathResource inFile = new ClassPathResource(fileName);
 
         Cipher cipher = FileDecryptor.makeCipher(password);
 
-        FileInputStream stream = new FileInputStream(inFile);
-        encData = new byte[(int)inFile.length()];
-        stream.read(encData);
+        InputStream stream = inFile.getInputStream();
+        encData = stream.readAllBytes();
         stream.close();
         decData = cipher.doFinal(encData);
 
-        FileOutputStream target = new FileOutputStream(new File(decodedFilepath));
+        File decodedFile = File.createTempFile(inFile.getFilename(), null);
+        FileOutputStream target = new FileOutputStream(decodedFile);
         target.write(decData);
         target.close();
 
-        return decodedFilepath;
+        return decodedFile;
     }
 }
-
-
