@@ -1,6 +1,5 @@
 package com.wine.to.up.notification.service.controller;
 
-import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.dto.NotificationDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
