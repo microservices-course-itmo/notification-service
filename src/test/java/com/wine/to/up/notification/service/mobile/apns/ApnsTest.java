@@ -1,8 +1,14 @@
 package com.wine.to.up.notification.service.mobile.apns;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import com.eatthepath.pushy.apns.server.*;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
+import ch.qos.logback.classic.Logger;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.KeyPairGenerator;
@@ -22,6 +28,37 @@ public class ApnsTest {
     private ApnsSettings apnsSettings;
     private ApnsService apnsService;
     private MockApnsServer apnsServer;
+
+    private ListAppender<ILoggingEvent> appender;
+    private Logger appLogger = (Logger) LoggerFactory.getLogger(ApnsService.class);
+
+    @Before
+    public void setUp() {
+        appender = new ListAppender<>();
+        appender.start();
+        appLogger.addAppender(appender);
+    }
+
+    @After
+    public void tearDown() {
+        appLogger.detachAppender(appender);
+    }
+
+    @Test
+    public void testConstructor() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(256, new SecureRandom());
+
+        apnsSettings = new ApnsSettings();
+        apnsSettings.setFilePath("");
+        apnsSettings.setFilePassword("");
+        apnsSettings.setTrustedCertificatePath("");
+        apnsSettings.setApnsServerHost("");
+        apnsSettings.setApnsServerPort(0);
+
+        apnsService = new ApnsService(apnsSettings);
+        assertThat(appender.list).extracting(ILoggingEvent::getFormattedMessage).contains("Error initializing APNS client");
+    }
 
     @Test
     public void testSendMessage() throws Exception {
