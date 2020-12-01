@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FcmService implements NotificationSender<FcmPushNotificationRequest> {
 
+    private static final String DEVICE_SYSTEM = "Android";
+
     @Autowired
     private NotificationServiceMetricsCollector metrics;
 
@@ -45,7 +47,7 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
             throws InterruptedException, ExecutionException {
         Message message = getPreconfiguredMessage(request);
         String response = sendAndGetResponse(message);
-        metrics.notificationsSentInc("Android");
+        metrics.notificationsSentInc(DEVICE_SYSTEM);
         log.debug("Sent message without data. Token: {}, {}", request.getClientToken(), response);
     }
 
@@ -54,17 +56,19 @@ public class FcmService implements NotificationSender<FcmPushNotificationRequest
         final String payload = "New discount on " + event.getWineName()
                 + "! New price is: " + event.getNewWinePrice();
         final String message = "New price is: " + event.getNewWinePrice();
-        event.getUserTokensList().forEach(t->{
-            t.getFcmTokensList().forEach(token->{
-                final FcmPushNotificationRequest fcmPushNotificationRequest=new FcmPushNotificationRequest(payload,message,token);
-                try {
-                    sendMessage(fcmPushNotificationRequest);
-                } catch (InterruptedException | ExecutionException e) {
-                    log.warn("Failed to send notification!{}",fcmPushNotificationRequest.toString());
-                    metrics.notificationsFailedInc("Android");
-                }
-            });
-        });
+        event.getUserTokensList().forEach(t-> t.getFcmTokensList().forEach(token->{
+            final FcmPushNotificationRequest fcmPushNotificationRequest=new FcmPushNotificationRequest(payload,message,token);
+            try {
+                sendMessage(fcmPushNotificationRequest);
+            } catch (InterruptedException e) {
+                log.warn("Failed to send notification!{}",fcmPushNotificationRequest.toString());
+                metrics.notificationsFailedInc(DEVICE_SYSTEM);
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                log.warn("Failed to send notification!{}",fcmPushNotificationRequest.toString());
+                metrics.notificationsFailedInc(DEVICE_SYSTEM);
+            }
+        }));
     }
 
     private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {

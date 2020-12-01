@@ -84,7 +84,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
 
     @Override
     public void sendAll(WinePriceUpdatedWithTokensEvent event) {
-
+        throw new UnsupportedOperationException();
     }
 
 }

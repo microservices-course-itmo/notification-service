@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Getter
 public class UserServiceKafkaMessageHandler {
 
-    // private final NotificationSender<FcmPushNotificationRequest> notificationSender;
     private final FcmService fcmService;
     private final ApnsService apnsService;
 
