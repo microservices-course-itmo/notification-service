@@ -107,18 +107,6 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <!-- Required: Swagger -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger-ui.version}</version>
-        </dependency>
-
         <!-- for tests -->
         <dependency>
             <groupId>com.h2database</groupId>
