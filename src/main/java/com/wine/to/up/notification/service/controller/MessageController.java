@@ -23,6 +23,7 @@ public class MessageController {
 
     @GetMapping
     public List<String> getSentMessages() {
+        log.debug("Received request for info about sent messages.");
         return messageRepository.findDistinctContent();
     }
 }

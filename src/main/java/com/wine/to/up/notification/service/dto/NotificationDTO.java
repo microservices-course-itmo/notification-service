@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.DTO;
+package com.wine.to.up.notification.service.dto;
 
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import lombok.Getter;
@@ -12,5 +12,7 @@ public class NotificationDTO {
     private long id;
     private String message;
     private NotificationType type;
+    private int timestamp;
     private long userId;
+    private long wineId;
 }

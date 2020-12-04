@@ -37,7 +37,7 @@ public class NotificationTest {
 
     @Test
     public void setTypeTest() {
-        NotificationType notificationType = NotificationType.ANDROID;
+        NotificationType notificationType = NotificationType.WINE_PRICE_UPDATED;
         Notification notification = new Notification();
         notification.setType(notificationType);
         assertThat(notification.getType()).isEqualTo(notificationType);
