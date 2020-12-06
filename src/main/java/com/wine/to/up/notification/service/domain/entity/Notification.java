@@ -41,7 +41,7 @@ public class Notification {
     private long userId;
 
     @Column(name = "wine_id")
-    private long wineId;
+    private String wineId;
 
     public void setCurrentTime() {
         Date date = new Date();
