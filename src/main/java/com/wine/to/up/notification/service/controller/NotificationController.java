@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -28,15 +28,21 @@ public class NotificationController {
     }
 
     @PutMapping(value = "/")
-    public void updateNotification(@RequestBody NotificationDTO notification) {
-        log.debug("New notification CRUD request. Action = UPDATE. id = {}", notification.getId());
-        Notification persistentNotification = new Notification();
-        persistentNotification.setId(notification.getId());
-        persistentNotification.setMessage(notification.getMessage());
-        persistentNotification.setType(notification.getType());
-        persistentNotification.setUserId(notification.getUserId());
-        log.debug("Notification entry updated. id = {}", persistentNotification.getId());
-        notificationRepository.save(persistentNotification);
+    public Notification updateNotification(@RequestBody NotificationDTO notification, @PathVariable(value = "id") Long id) {
+        log.debug("New notification CRUD request. Action = UPDATE.");
+        Notification persistentNotification = Notification.builder()
+            .id(id)
+            .message(notification.getMessage())
+            .type(notification.getType())
+            .timestamp(new Timestamp(notification.getTimestamp()))
+            .userId(notification.getUserId())
+            .wineId(notification.getWineId())
+            .build();
+
+        Notification updated = notificationRepository.save(persistentNotification);
+        log.debug("Notification entry updated. id = {}", updated.getId());
+
+        return updated;
     }
 
     @GetMapping(value = "/{id}")
@@ -54,18 +60,6 @@ public class NotificationController {
         return notificationRepository.findAllByUserIdOrderByTimestampDesc(id);
     }
 
-    @DeleteMapping(value = "/")
-    public void deleteNotification(@RequestBody NotificationDTO notification) {
-        log.debug("New notification CRUD request. Action = DELETE. id = {}", notification.getId());
-        Notification persistentNotification = new Notification();
-        persistentNotification.setId(notification.getId());
-        persistentNotification.setMessage(notification.getMessage());
-        persistentNotification.setType(notification.getType());
-        persistentNotification.setUserId(notification.getUserId());
-        log.info("Notification entry deleted. id = {}", persistentNotification.getId());
-        notificationRepository.delete(persistentNotification);
-    }
-
     @DeleteMapping(value = "/{id}")
     public void deleteNotificationById(@PathVariable(value = "id") Long id) {
         log.debug("New notification CRUD request. Action = DELETE. id = {}", id);
@@ -74,15 +68,20 @@ public class NotificationController {
     }
 
     @PostMapping(value = "/")
-    public void createNotification(@RequestBody NotificationDTO notification) {
-        log.debug("New notification CRUD request. Action = SAVE. id = {}", notification.getId());
-        Notification persistentNotification = new Notification();
-        persistentNotification.setId(notification.getId());
-        persistentNotification.setMessage(notification.getMessage());
-        persistentNotification.setType(notification.getType());
-        persistentNotification.setUserId(notification.getUserId());
-        log.debug("Notification entry saved. id = {}", persistentNotification.getId());
-        notificationRepository.save(persistentNotification);
+    public Notification createNotification(@RequestBody NotificationDTO notification) {
+        log.debug("New notification CRUD request. Action = SAVE.");
+        Notification persistentNotification = Notification.builder()
+            .message(notification.getMessage())
+            .type(notification.getType())
+            .timestamp(new Timestamp(notification.getTimestamp()))
+            .userId(notification.getUserId())
+            .wineId(notification.getWineId())
+            .build();
+
+        Notification saved = notificationRepository.save(persistentNotification);
+        log.debug("Notification entry saved. id = {}", saved.getId());
+
+        return saved;
     }
 
     @Autowired

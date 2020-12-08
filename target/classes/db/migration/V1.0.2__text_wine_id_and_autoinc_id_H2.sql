@@ -1,2 +1,0 @@
-ALTER TABLE notification ALTER COLUMN wine_id SET DATA TYPE varchar;
-ALTER TABLE notification ALTER COLUMN id IDENTITY;

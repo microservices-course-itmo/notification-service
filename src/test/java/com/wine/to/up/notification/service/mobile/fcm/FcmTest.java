@@ -4,6 +4,7 @@ import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.model.fcm.FcmPushNotificationRequest;
 import com.wine.to.up.user.service.api.message.UserTokensOuterClass.UserTokens;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class FcmTest {
     @Autowired
     private FcmService fcmService;
+
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
 
     @Before
     public void initializeTestFcm() {

@@ -9,10 +9,9 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class NotificationDTO {
-    private long id;
     private String message;
     private NotificationType type;
-    private int timestamp;
+    private long timestamp;
     private long userId;
-    private long wineId;
+    private String wineId;
 }
