@@ -1,10 +1,12 @@
 package com.wine.to.up.notification.service.domain.entity;
 
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,6 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class NotificationTest {
+
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
 
     @Test
     public void noArgsConstructorTest() {

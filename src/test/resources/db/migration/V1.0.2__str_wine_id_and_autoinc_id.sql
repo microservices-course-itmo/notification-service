@@ -1,0 +1,6 @@
+TRUNCATE TABLE notification;
+
+ALTER TABLE notification DROP COLUMN id;
+
+ALTER TABLE notification ALTER COLUMN wine_id SET DATA TYPE text;
+ALTER TABLE notification ADD COLUMN id IDENTITY NOT NULL PRIMARY KEY;

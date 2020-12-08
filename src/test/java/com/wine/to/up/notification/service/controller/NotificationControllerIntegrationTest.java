@@ -36,35 +36,32 @@ public class NotificationControllerIntegrationTest {
     @Test
     public void testGetNotificationById() {
         Notification notification = new Notification();
-        notification.setId(1);
         notification.setMessage("testGetById");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
 
-        Notification found = notificationController.getNotificationById(1L);
+        Notification found = notificationController.getNotificationById(created.getId());
         assertThat(found.getMessage()).isEqualTo("testGetById");
     }
 
     @Test
     public void testPutNotification() {
         NotificationDTO notification = new NotificationDTO();
-        notification.setId(2);
         notification.setMessage("testPut");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
-        notificationController.createNotification(notification);
+        Notification created = notificationController.createNotification(notification);
 
-        Notification found = notificationController.getNotificationById(2L);
+        Notification found = notificationController.getNotificationById(created.getId());
         assertThat(found.getMessage()).isEqualTo("testPut");
     }
 
     @Test
     public void testGetNotificationByUserId() {
         NotificationDTO notification = new NotificationDTO();
-        notification.setId(3);
         notification.setMessage("testGetByUserId");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(6);
@@ -78,56 +75,35 @@ public class NotificationControllerIntegrationTest {
     @Test
     public void testUpdateNotification() {
         NotificationDTO notification = new NotificationDTO();
-        notification.setId(4);
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
-        notificationController.createNotification(notification);
+        Notification created = notificationController.createNotification(notification);
         notification.setMessage("bar");
-        notificationController.updateNotification(notification);
+        Notification updated = notificationController.updateNotification(notification, created.getId());
 
-        Notification found = notificationController.getNotificationById(4L);
+        assertThat(created.getId()).isEqualTo(updated.getId());
+        Notification found = notificationController.getNotificationById(updated.getId());
         assertThat(found.getMessage()).isEqualTo("bar");
-    }
-
-    @Test
-    public void testDeleteNotification() {
-        NotificationDTO notification = new NotificationDTO();
-        notification.setId(5);
-        notification.setMessage("foo");
-        notification.setType(NotificationType.WINE_PRICE_UPDATED);
-        notification.setUserId(5);
-
-        notificationController.createNotification(notification);
-
-        Notification found = notificationController.getNotificationById(5L);
-        assertThat(found.getMessage()).isEqualTo("foo");
-
-        notificationController.deleteNotification(notification);
-
-        assertThrows(NotificationNotFoundException.class, () -> {
-            notificationController.getNotificationById(5L);
-        });
     }
 
     @Test
     public void testDeleteNotificationById() {
         NotificationDTO notification = new NotificationDTO();
-        notification.setId(6);
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
 
-        notificationController.createNotification(notification);
+        Notification created = notificationController.createNotification(notification);
 
-        Notification found = notificationController.getNotificationById(6L);
+        Notification found = notificationController.getNotificationById(created.getId());
         assertThat(found.getMessage()).isEqualTo("foo");
 
-        notificationController.deleteNotificationById(6L);
+        notificationController.deleteNotificationById(created.getId());
 
         assertThrows(NotificationNotFoundException.class, () -> {
-            notificationController.getNotificationById(6L);
+            notificationController.getNotificationById(created.getId());
         });
     }
 
