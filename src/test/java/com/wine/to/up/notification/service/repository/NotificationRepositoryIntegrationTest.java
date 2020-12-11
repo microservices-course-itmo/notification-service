@@ -1,5 +1,6 @@
 package com.wine.to.up.notification.service.repository;
 
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
@@ -22,19 +24,21 @@ public class NotificationRepositoryIntegrationTest {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
+
     @Test
     public void testGetNotificationById() {
         Notification notification = new Notification();
-        notification.setId(1);
         notification.setMessage("testGetById");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(1L);
+        Optional<Notification> found = notificationRepository.findById(created.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getMessage()).isEqualTo("testGetById");
     }
@@ -42,16 +46,15 @@ public class NotificationRepositoryIntegrationTest {
     @Test
     public void testPutNotification() {
         Notification notification = new Notification();
-        notification.setId(2);
         notification.setMessage("testPut");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(2L);
+        Optional<Notification> found = notificationRepository.findById(created.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getMessage()).isEqualTo("testPut");
     }
@@ -59,11 +62,10 @@ public class NotificationRepositoryIntegrationTest {
     @Test
     public void testGetNotificationByUserId() {
         Notification notification = new Notification();
-        notification.setId(3);
         notification.setMessage("testGetByUserId");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(6);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
         notificationRepository.save(notification);
@@ -75,18 +77,18 @@ public class NotificationRepositoryIntegrationTest {
     @Test
     public void testUpdateNotification() {
         Notification notification = new Notification();
-        notification.setId(4);
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
-        notificationRepository.save(notification);
-        notification.setMessage("bar");
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
+        created.setMessage("bar");
+        Notification updated = notificationRepository.save(created);
 
-        Optional<Notification> found = notificationRepository.findById(4L);
+        assertThat(created.getId()).isEqualTo(updated.getId());
+        Optional<Notification> found = notificationRepository.findById(created.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getMessage()).isEqualTo("bar");
     }
@@ -94,44 +96,42 @@ public class NotificationRepositoryIntegrationTest {
     @Test
     public void testDeleteNotification() {
         Notification notification = new Notification();
-        notification.setId(5);
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(5L);
+        Optional<Notification> found = notificationRepository.findById(created.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getMessage()).isEqualTo("foo");
 
         notificationRepository.delete(notification);
 
-        Optional<Notification> notFound = notificationRepository.findById(5L);
+        Optional<Notification> notFound = notificationRepository.findById(created.getId());
         assertThat(notFound).isNotPresent();
     }
 
     @Test
     public void testDeleteNotificationById() {
         Notification notification = new Notification();
-        notification.setId(6);
         notification.setMessage("foo");
         notification.setType(NotificationType.WINE_PRICE_UPDATED);
         notification.setUserId(5);
-        notification.setWineId(33);
+        notification.setWineId("33");
         notification.setTimestamp(new Timestamp(new Date().getTime()));
 
-        notificationRepository.save(notification);
+        Notification created = notificationRepository.save(notification);
 
-        Optional<Notification> found = notificationRepository.findById(6L);
+        Optional<Notification> found = notificationRepository.findById(created.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getMessage()).isEqualTo("foo");
 
-        notificationRepository.deleteById(6L);
+        notificationRepository.deleteById(created.getId());
 
-        Optional<Notification> notFound = notificationRepository.findById(6L);
+        Optional<Notification> notFound = notificationRepository.findById(created.getId());
         assertThat(notFound).isNotPresent();
     }
 

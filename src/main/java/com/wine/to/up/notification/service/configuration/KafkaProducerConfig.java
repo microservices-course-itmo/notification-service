@@ -1,6 +1,7 @@
 package com.wine.to.up.notification.service.configuration;
 
 import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -30,13 +32,13 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<Long, WinePriceUpdatedResponse>producerFactory() {
+    public ProducerFactory<Long, WinePriceUpdatedWithTokensEvent>producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<Long, WinePriceUpdatedResponse> kafkaTemplate() {
-        KafkaTemplate<Long, WinePriceUpdatedResponse> kafkaTemplate = new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<Long, WinePriceUpdatedWithTokensEvent> kafkaTemplate() {
+        KafkaTemplate<Long,WinePriceUpdatedWithTokensEvent> kafkaTemplate = new KafkaTemplate<>(producerFactory());
         kafkaTemplate.setMessageConverter(new StringJsonMessageConverter());
         kafkaTemplate.setDefaultTopic("wine-response-topic");
         return kafkaTemplate;

@@ -3,14 +3,19 @@ package com.wine.to.up.notification.service.domain.model.kafka;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.assertj.core.api.Assertions.assertThat;
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class CatalogMessageTest {
+
+    @MockBean
+    private NotificationServiceMetricsCollector notificationServiceMetricsCollector;
 
     @Test
     public void testNoArgsConstructor() {
