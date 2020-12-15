@@ -1,8 +1,11 @@
 package com.wine.to.up.notification.service.messaging;
 
+import java.util.List;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
+import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
+import com.wine.to.up.notification.service.repository.NotificationRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Component;
 @Getter
 public class UserServiceKafkaMessageHandler {
 
+    private final NotificationRepository notificationRepository;
+
     private final FcmService fcmService;
     private final ApnsService apnsService;
 
@@ -22,7 +27,8 @@ public class UserServiceKafkaMessageHandler {
 
 
     @Autowired
-    public UserServiceKafkaMessageHandler(FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
+    public UserServiceKafkaMessageHandler(NotificationRepository notificationRepository, FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
+        this.notificationRepository = notificationRepository;
         this.fcmService = fcmService;
         this.apnsService = apnsService;
         this.metrics = metrics;
@@ -32,10 +38,13 @@ public class UserServiceKafkaMessageHandler {
             topics = {"user-service-wine-price-updated-with-tokens"},
             containerFactory = "singleFactory")
     public void handle(WinePriceUpdatedWithTokensEvent event) {
-        log.info("Message received:{}", event);
+        log.debug("Message received:{}", event);
         metrics.messagesReceivedInc();
 
+        notificationRepository.saveWinePriceUpdatedWithTokens(event);
+
         fcmService.sendAll(event);
+        // apnsService.sendAll(event);
     }
 
 }
