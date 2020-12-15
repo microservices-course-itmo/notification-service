@@ -20,7 +20,7 @@ public interface NotificationRepository extends CrudRepository<Notification, Lon
         final String message = String.format("New discount on %s! New price is: %f", event.getWineName(), event.getNewWinePrice());
         final Timestamp ts = new Timestamp(new Date().getTime());
 
-        List<Notification> savedNotifications = new ArrayList<Notification>();
+        List<Notification> savedNotifications = new ArrayList<>();
         for (UserTokens tokens : event.getUserTokensList()) {
             Notification notification = Notification.builder()
                 .message(message)

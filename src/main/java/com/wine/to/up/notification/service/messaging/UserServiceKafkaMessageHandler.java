@@ -1,8 +1,6 @@
 package com.wine.to.up.notification.service.messaging;
 
-import java.util.List;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
-import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
@@ -44,7 +42,6 @@ public class UserServiceKafkaMessageHandler {
         notificationRepository.saveWinePriceUpdatedWithTokens(event);
 
         fcmService.sendAll(event);
-        // apnsService.sendAll(event);
     }
 
 }
