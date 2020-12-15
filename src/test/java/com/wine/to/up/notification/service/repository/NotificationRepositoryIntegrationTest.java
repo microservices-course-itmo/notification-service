@@ -3,6 +3,8 @@ package com.wine.to.up.notification.service.repository;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
+import com.wine.to.up.user.service.api.message.UserTokensOuterClass.UserTokens;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -133,6 +136,37 @@ public class NotificationRepositoryIntegrationTest {
 
         Optional<Notification> notFound = notificationRepository.findById(created.getId());
         assertThat(notFound).isNotPresent();
+    }
+
+    @Test
+    public void testSaveWinePriceUpdatedWithTokens() {
+        List<UserTokens> tokensList = new ArrayList<UserTokens>();
+        for (int i = 0; i < 3; i++) {
+            tokensList.add(
+                UserTokens.newBuilder()
+                    .setUserId(i)
+                    .build()
+            );
+        }
+
+        WinePriceUpdatedWithTokensEvent event = WinePriceUpdatedWithTokensEvent.newBuilder()
+            .setWineName("test")
+            .setNewWinePrice(10.0f)
+            .setWineId("111abc")
+            .addAllUserTokens(tokensList)
+            .build();
+
+        List<Notification> created = notificationRepository.saveWinePriceUpdatedWithTokens(event);
+
+        for (int i = 0; i < 3; i++) {
+            Optional<Notification> probablyFound = notificationRepository.findById(created.get(i).getId());
+            assertThat(probablyFound).isPresent();
+
+            Notification found = probablyFound.get();
+            assertThat(found.getUserId()).isEqualTo(i);
+            assertThat(found.getMessage()).contains("New discount on test! New price is: 10.0");
+            assertThat(found.getWineId()).isEqualTo("111abc");
+        }
     }
 
 }
