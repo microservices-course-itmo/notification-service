@@ -1,7 +1,5 @@
 package com.wine.to.up.notification.service.configuration;
 
-import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
-import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.beans.factory.annotation.Value;
