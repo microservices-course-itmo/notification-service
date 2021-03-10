@@ -3,6 +3,7 @@ package com.wine.to.up.notification.service.mobile.apns;
 import com.eatthepath.pushy.apns.ApnsClient;
 import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import com.eatthepath.pushy.apns.PushNotificationResponse;
+import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
@@ -11,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -32,6 +32,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      * Pushy's APNS client for sending Apple pushes.
      */
     private ApnsClient apnsClient;
+    // TODO: assign topic = bundleId
 
     /**
      * Reads settings from ApnsSettings, tries to read APNS cert file.
@@ -42,11 +43,13 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
     public ApnsService(ApnsSettings settings) {
         log.info("Creating ApnsService...");
         try {
-            final File keyFile = new File(this.getClass().getResource(settings.getFilePath()).toURI());
+            final URI keyFileUri = this.getClass().getResource(settings.getP8FilePath()).toURI();
 
             ApnsClientBuilder apnsClientBuilder = new ApnsClientBuilder()
                     .setApnsServer(settings.getApnsServerHost(), settings.getApnsServerPort())
-                    .setClientCredentials(keyFile, settings.getFilePassword());
+                    .setSigningKey(ApnsSigningKey.loadFromPkcs8File(
+                            new File(keyFileUri), settings.getTeamId(), settings.getKeyId())
+                    );
             if (settings.getTrustedCertificatePath() != null) {
                 apnsClientBuilder.setTrustedServerCertificateChain(
                         this.getClass().getResourceAsStream(settings.getTrustedCertificatePath())
@@ -55,7 +58,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
             apnsClient = apnsClientBuilder.build();
 
             log.info("Successfully initialized APNS client");
-        } catch (URISyntaxException | IOException | NullPointerException | IllegalArgumentException e) {
+        } catch (Exception e) {
             log.error("Error initializing APNS client", e);
         }
     }
