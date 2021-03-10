@@ -90,7 +90,19 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
 
     @Override
     public void sendAll(WinePriceUpdatedWithTokensEvent event) {
-        throw new UnsupportedOperationException();
+        final String body = "New discount on " + event.getWineName() + "! New price is: " + event.getNewWinePrice();
+        final String payload = "{\"aps\": {\"alert\": {\"title\": \"Got new discount!\", \"body\": \"" + body + "\"}}}";
+        event.getUserTokensList().forEach(t-> t.getIosTokensList().forEach(token-> {
+            final ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest(token, payload);
+            try {
+                this.sendMessage(apnsPushNotificationRequest);
+            } catch (InterruptedException e) {
+                log.warn("Failed to send iOS notification! {}", apnsPushNotificationRequest.toString());
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                log.warn("Failed to send iOS notification! {}", apnsPushNotificationRequest.toString());
+            }
+        }));
     }
 
 }
