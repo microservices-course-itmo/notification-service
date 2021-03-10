@@ -31,8 +31,8 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
     /**
      * Pushy's APNS client for sending Apple pushes.
      */
+    private final String topic;
     private ApnsClient apnsClient;
-    // TODO: assign topic = bundleId
 
     /**
      * Reads settings from ApnsSettings, tries to read APNS cert file.
@@ -42,6 +42,9 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      */
     public ApnsService(ApnsSettings settings) {
         log.info("Creating ApnsService...");
+
+        this.topic = settings.getAppBundleId();
+
         try {
             final URI keyFileUri = this.getClass().getResource(settings.getP8FilePath()).toURI();
 
@@ -66,7 +69,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
     @Override
     /**
      * Implementation of NotificationSender's sendMessage for APNS.
-     * 
+     *
      * @param request  Data object with APNS push information
      * 
      * @throws ExecutionException
@@ -79,7 +82,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
             throws ExecutionException, InterruptedException {
         log.info("Sending notification to device: {}", request.getDeviceToken());
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
-                request.getDeviceToken(), request.getTopic(), request.getPayload()
+                request.getDeviceToken(), this.topic, request.getPayload()
         );
         PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
         log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
