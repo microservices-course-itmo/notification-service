@@ -27,6 +27,6 @@ public class ApnsSettings {
     private String appBundleId;
 
     private String trustedCertificatePath = null;
-    private String apnsServerHost = ApnsClientBuilder.DEVELOPMENT_APNS_HOST;
+    private String apnsServerHost = ApnsClientBuilder.PRODUCTION_APNS_HOST;
     private int apnsServerPort = 443;
 }
