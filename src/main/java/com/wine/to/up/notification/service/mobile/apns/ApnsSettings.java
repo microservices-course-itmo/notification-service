@@ -18,10 +18,13 @@ import org.springframework.stereotype.Component;
  * @see com.wine.to.up.notification.service.mobile.apns.ApnsService
  */
 public class ApnsSettings {
-    private String filePath;
-    private String filePassword;
+    private String p8FilePath;
+    private String p8DecryptPassword;
+    private String teamId;
+    private String keyId;
+    private String appBundleId;
 
     private String trustedCertificatePath = null;
-    private String apnsServerHost = ApnsClientBuilder.DEVELOPMENT_APNS_HOST;
+    private String apnsServerHost = ApnsClientBuilder.PRODUCTION_APNS_HOST;
     private int apnsServerPort = 443;
 }
