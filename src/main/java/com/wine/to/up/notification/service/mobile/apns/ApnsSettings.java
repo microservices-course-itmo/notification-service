@@ -18,9 +18,6 @@ import org.springframework.stereotype.Component;
  * @see com.wine.to.up.notification.service.mobile.apns.ApnsService
  */
 public class ApnsSettings {
-    private String filePath;
-    private String filePassword;
-
     private String p8FilePath;
     private String teamId;
     private String keyId;
