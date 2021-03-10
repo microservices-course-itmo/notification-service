@@ -1,4 +1,4 @@
-package com.wine.to.up.notification.service.mobile.fcm;
+package com.wine.to.up.notification.service.mobile;
 
 import java.io.*;
 import java.security.GeneralSecurityException;

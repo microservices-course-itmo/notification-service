@@ -6,6 +6,7 @@ import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
+import com.wine.to.up.notification.service.mobile.FileDecryptor;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,8 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
         this.topic = settings.getAppBundleId();
 
         try {
-            final URI keyFileUri = this.getClass().getResource(settings.getP8FilePath()).toURI();
+            File decryptedFile = FileDecryptor.decryptFile(settings.getP8FilePath(), settings.getP8DecryptPassword());
+            final URI keyFileUri = decryptedFile.toURI();
 
             ApnsClientBuilder apnsClientBuilder = new ApnsClientBuilder()
                     .setApnsServer(settings.getApnsServerHost(), settings.getApnsServerPort())

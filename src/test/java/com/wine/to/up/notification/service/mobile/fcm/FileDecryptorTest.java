@@ -3,6 +3,7 @@ package com.wine.to.up.notification.service.mobile.fcm;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.wine.to.up.notification.service.mobile.FileDecryptor;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import org.junit.Before;
 import org.junit.Test;
