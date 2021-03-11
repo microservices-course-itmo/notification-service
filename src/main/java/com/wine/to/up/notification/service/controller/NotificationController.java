@@ -1,10 +1,14 @@
 package com.wine.to.up.notification.service.controller;
 
 import com.wine.to.up.notification.service.domain.entity.Notification;
+import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.dto.NotificationDTO;
+import com.wine.to.up.notification.service.dto.WinePriceUpdatedWithTokensEventDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
 import com.wine.to.up.notification.service.messaging.UserServiceKafkaMessageHandler;
+import com.wine.to.up.notification.service.mobile.apns.ApnsService;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
+import com.wine.to.up.user.service.api.message.UserTokensOuterClass.UserTokens;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ public class NotificationController {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private ApnsService apnsService;
 
 
     public NotificationController(NotificationRepository notificationRepository) {
@@ -84,11 +91,35 @@ public class NotificationController {
         return saved;
     }
 
+    @PostMapping(value = "/ios")
+    public void sendIosNotification(@RequestBody ApnsPushNotificationRequest notificationRequest) {
+        log.debug("Sending ios push-notification");
+        try {
+            apnsService.sendMessage(notificationRequest);
+        }
+        catch (Exception e) {
+            log.error("Failed to send push-notification");
+        }
+    }
+
     @Autowired
     private UserServiceKafkaMessageHandler userServiceKafkaMessageHandler;
 
     @PostMapping(value = "/trigger_kafka_consumer")
-    public void triggerKafkaConsumer(@RequestBody WinePriceUpdatedWithTokensEvent event) {
+    public void triggerKafkaConsumer(@RequestBody WinePriceUpdatedWithTokensEventDTO eventDTO) {
+        UserTokens tokens = UserTokens.newBuilder()
+            .setUserId(eventDTO.getUserId())
+            .addFcmTokens(eventDTO.getFcmToken())
+            .addIosTokens(eventDTO.getApnsToken())
+            .build();
+
+        WinePriceUpdatedWithTokensEvent event = WinePriceUpdatedWithTokensEvent.newBuilder()
+            .setWineId(eventDTO.getWineId())
+            .setWineName(eventDTO.getWineName())
+            .setNewWinePrice(eventDTO.getNewWinePrice())
+            .addUserTokens(tokens)
+            .build();
+
         userServiceKafkaMessageHandler.handle(event);
     }
 }

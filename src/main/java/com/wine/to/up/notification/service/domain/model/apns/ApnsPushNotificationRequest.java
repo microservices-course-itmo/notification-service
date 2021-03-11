@@ -15,6 +15,5 @@ import lombok.Setter;
  */
 public class ApnsPushNotificationRequest {
     private String deviceToken;
-    private String topic;
     private String payload;
 }

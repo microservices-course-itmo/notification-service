@@ -23,7 +23,7 @@
         <service.pushy.version>0.14.1</service.pushy.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <user-service-api.version>0.1.4-SNAPSHOT</user-service-api.version>
+        <user-service-api.version>0.1.5-SNAPSHOT</user-service-api.version>
 
         <notification.service.api.version>0.1.0-SNAPSHOT</notification.service.api.version>
 
@@ -67,6 +67,13 @@
             <version>${service.firebase.version}</version>
         </dependency>
 
+        <!-- Expo -->
+        <dependency>
+            <groupId>com.kinoroy.expo.push</groupId>
+            <artifactId>expo-push-sdk</artifactId>
+            <version>0.1.4</version>
+        </dependency>
+
         <!-- Kafka -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -84,13 +91,6 @@
             <groupId>com.eatthepath</groupId>
             <artifactId>pushy</artifactId>
             <version>${service.pushy.version}</version>
-        </dependency>
-      
-        <!-- Kafka -->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>2.6.2</version>
         </dependency>
 
         <!-- Db -->
@@ -154,40 +154,16 @@
             <artifactId>pushy</artifactId>
             <version>0.14.1</version>
         </dependency>
+
+        <!--Eureka-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.jacoco</groupId>-->
-<!--                <artifactId>jacoco-maven-plugin</artifactId>-->
-<!--                <version>${jacoco.version}</version>-->
-<!--                <configuration>-->
-<!--                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>-->
-<!--                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>-->
-<!--                    <output>file</output>-->
-<!--                    <append>true</append>-->
-<!--                    <excludes>-->
-<!--                        <exclude>*MethodAccess</exclude>-->
-<!--                    </excludes>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>jacoco-initialize</id>-->
-<!--                        <goals>-->
-<!--                            <goal>prepare-agent</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>test-compile</phase>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>jacoco-site</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>report</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>

@@ -102,8 +102,9 @@ public class NotificationControllerIntegrationTest {
 
         notificationController.deleteNotificationById(created.getId());
 
+        long notificationId = created.getId();
         assertThrows(NotificationNotFoundException.class, () -> {
-            notificationController.getNotificationById(created.getId());
+            notificationController.getNotificationById(notificationId);
         });
     }
 
