@@ -5,11 +5,13 @@ import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
+import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.FileDecryptor;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -29,11 +31,16 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApnsService implements NotificationSender<ApnsPushNotificationRequest> {
 
+    private static final String DEVICE_SYSTEM = "IOs";
+
     /**
      * Pushy's APNS client for sending Apple pushes.
      */
     private final String topic;
     private ApnsClient apnsClient;
+
+    @Autowired
+    private NotificationServiceMetricsCollector metrics;
 
     /**
      * Reads settings from ApnsSettings, tries to read APNS cert file.
@@ -87,6 +94,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
                 request.getDeviceToken(), this.topic, request.getPayload()
         );
         PushNotificationResponse<SimpleApnsPushNotification> response = apnsClient.sendNotification(notification).get();
+        metrics.notificationsSentInc(DEVICE_SYSTEM);
         log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
     }
 
@@ -100,9 +108,11 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
                 this.sendMessage(apnsPushNotificationRequest);
             } catch (InterruptedException e) {
                 log.warn("Failed to send iOS notification! {}", apnsPushNotificationRequest.toString());
+                metrics.notificationsFailedInc(DEVICE_SYSTEM);
                 Thread.currentThread().interrupt();
             } catch (ExecutionException e) {
                 log.warn("Failed to send iOS notification! {}", apnsPushNotificationRequest.toString());
+                metrics.notificationsFailedInc(DEVICE_SYSTEM);
             }
         }));
     }
