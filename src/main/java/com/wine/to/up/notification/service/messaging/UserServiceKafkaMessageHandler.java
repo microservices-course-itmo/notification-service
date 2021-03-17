@@ -42,6 +42,7 @@ public class UserServiceKafkaMessageHandler {
         notificationRepository.saveWinePriceUpdatedWithTokens(event);
 
         fcmService.sendAll(event);
+        apnsService.sendAll(event);
     }
 
 }
