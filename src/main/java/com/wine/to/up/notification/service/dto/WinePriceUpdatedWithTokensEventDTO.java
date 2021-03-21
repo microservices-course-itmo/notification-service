@@ -16,6 +16,8 @@ public class WinePriceUpdatedWithTokensEventDTO {
     private float newWinePrice;
 
     private long userId;
+
     private String fcmToken;
     private String apnsToken;
+    private String expoToken;
 }
