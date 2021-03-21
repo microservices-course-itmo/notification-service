@@ -111,6 +111,7 @@ public class NotificationController {
             .setUserId(eventDTO.getUserId())
             .addFcmTokens(eventDTO.getFcmToken())
             .addIosTokens(eventDTO.getApnsToken())
+            .addExpoTokens(eventDTO.getExpoToken())
             .build();
 
         WinePriceUpdatedWithTokensEvent event = WinePriceUpdatedWithTokensEvent.newBuilder()

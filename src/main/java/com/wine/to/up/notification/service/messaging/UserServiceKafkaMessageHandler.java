@@ -2,6 +2,7 @@ package com.wine.to.up.notification.service.messaging;
 
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.mobile.apns.ApnsService;
+import com.wine.to.up.notification.service.mobile.expo.ExpoService;
 import com.wine.to.up.notification.service.mobile.fcm.FcmService;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
 import lombok.Getter;
@@ -20,15 +21,21 @@ public class UserServiceKafkaMessageHandler {
 
     private final FcmService fcmService;
     private final ApnsService apnsService;
+    private final ExpoService expoService;
 
     private final NotificationServiceMetricsCollector metrics;
 
 
     @Autowired
-    public UserServiceKafkaMessageHandler(NotificationRepository notificationRepository, FcmService fcmService, ApnsService apnsService, NotificationServiceMetricsCollector metrics) {
+    public UserServiceKafkaMessageHandler(NotificationRepository notificationRepository,
+            FcmService fcmService, ApnsService apnsService, ExpoService expoService,
+            NotificationServiceMetricsCollector metrics) {
         this.notificationRepository = notificationRepository;
+
         this.fcmService = fcmService;
         this.apnsService = apnsService;
+        this.expoService = expoService;
+
         this.metrics = metrics;
     }
 
@@ -43,6 +50,7 @@ public class UserServiceKafkaMessageHandler {
 
         fcmService.sendAll(event);
         apnsService.sendAll(event);
+        expoService.sendAll(event);
     }
 
 }
