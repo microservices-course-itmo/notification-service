@@ -5,6 +5,8 @@ import ch.qos.logback.core.read.ListAppender;
 import com.eatthepath.pushy.apns.server.*;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import ch.qos.logback.classic.Logger;
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http2.Http2Headers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,12 +98,12 @@ public class ApnsTest {
     private class PushNotificationListener implements MockApnsServerListener {
 
         @Override
-        public void handlePushNotificationAccepted(io.netty.handler.codec.http2.Http2Headers http2Headers, io.netty.buffer.ByteBuf byteBuf) {
+        public void handlePushNotificationAccepted(Http2Headers http2Headers, ByteBuf byteBuf) {
             ApnsPushNotificationStorage.INSTANCE.addNotification(byteBuf);
         }
 
         @Override
-        public void handlePushNotificationRejected(io.netty.handler.codec.http2.Http2Headers http2Headers, io.netty.buffer.ByteBuf byteBuf, RejectionReason rejectionReason, Instant instant) {
+        public void handlePushNotificationRejected(Http2Headers http2Headers, ByteBuf byteBuf, RejectionReason rejectionReason, Instant instant) {
         }
     }
 
