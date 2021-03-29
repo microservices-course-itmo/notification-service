@@ -73,7 +73,7 @@ public class NotificationRepositoryIntegrationTest {
 
         notificationRepository.save(notification);
 
-        List<Notification> found = notificationRepository.findAllByUserIdOrderByTimestampDesc(6L);
+        List<Notification> found = notificationRepository.findAllByUserIdOrderByViewedDescTimestampDesc(6L);
         assertThat(found.get(0).getMessage()).isEqualTo("testGetByUserId");
     }
 
