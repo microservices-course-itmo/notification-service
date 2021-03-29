@@ -108,4 +108,17 @@ public class NotificationControllerIntegrationTest {
         });
     }
 
+    @Test
+    public void testMarkNotificationViewed() {
+        NotificationDTO notification = new NotificationDTO();
+
+        Notification created = notificationController.createNotification(notification);
+        assertThat(created.isViewed()).isFalse();
+
+        notificationController.markNotificationViewed(created.getId());
+
+        Notification found = notificationController.getNotificationById(created.getId());
+        assertThat(found.isViewed()).isTrue();
+    }
+
 }

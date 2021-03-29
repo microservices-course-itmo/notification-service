@@ -39,6 +39,10 @@ public class Notification {
     @Column(name = "wine_id")
     private String wineId;
 
+    @Column(name = "viewed")
+    @Builder.Default
+    private boolean viewed = false;
+
     public void setCurrentTime() {
         Date date = new Date();
         this.timestamp = new Timestamp(date.getTime());

@@ -91,6 +91,19 @@ public class NotificationController {
         return saved;
     }
 
+    @PutMapping(value = "/view/{id}")
+    public void markNotificationViewed(@PathVariable(value = "id") Long id) {
+        log.debug("New notification CRUD request. Action = MARK VIEWED.");
+
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new NotificationNotFoundException(id));
+
+        notification.setViewed(true);
+        Notification updated = notificationRepository.save(notification);
+
+        log.debug("Notification entry marked as viewed. id = {}", updated.getId());
+    }
+
     @PostMapping(value = "/ios")
     public void sendIosNotification(@RequestBody ApnsPushNotificationRequest notificationRequest) {
         log.debug("Sending ios push-notification");
