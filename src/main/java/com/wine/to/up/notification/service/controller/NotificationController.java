@@ -99,9 +99,9 @@ public class NotificationController {
                 .orElseThrow(() -> new NotificationNotFoundException(id));
 
         notification.setViewed(true);
-        Notification updated = notificationRepository.save(notification);
+        notificationRepository.save(notification);
 
-        log.debug("Notification entry marked as viewed. id = {}", updated.getId());
+        log.debug("Notification entry marked as viewed. id = {}", notification.getId());
     }
 
     @PostMapping(value = "/ios")
