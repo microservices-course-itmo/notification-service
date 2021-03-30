@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends CrudRepository<Notification, Long> {
-    List<Notification> findAllByUserIdOrderByTimestampDesc(long userId);
+    List<Notification> findAllByUserIdOrderByViewedAscTimestampDesc(long userId);
 
     default List<Notification> saveWinePriceUpdatedWithTokens(WinePriceUpdatedWithTokensEvent event) {
         final String message = String.format("New discount on %s! New price is: %f", event.getWineName(), event.getNewWinePrice());

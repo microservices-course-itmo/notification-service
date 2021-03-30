@@ -64,7 +64,7 @@ public class NotificationController {
     @ResponseBody
     public List<Notification> getNotificationByUserId(@RequestParam(value = "userId") Long id) {
         log.debug("New notification CRUD request. Action = GET. user_id = {}", id);
-        return notificationRepository.findAllByUserIdOrderByTimestampDesc(id);
+        return notificationRepository.findAllByUserIdOrderByViewedAscTimestampDesc(id);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -89,6 +89,19 @@ public class NotificationController {
         log.debug("Notification entry saved. id = {}", saved.getId());
 
         return saved;
+    }
+
+    @PutMapping(value = "/view/{id}")
+    public void markNotificationViewed(@PathVariable(value = "id") Long id) {
+        log.debug("New notification CRUD request. Action = MARK VIEWED.");
+
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new NotificationNotFoundException(id));
+
+        notification.setViewed(true);
+        notificationRepository.save(notification);
+
+        log.debug("Notification entry marked as viewed. id = {}", notification.getId());
     }
 
     @PostMapping(value = "/ios")
