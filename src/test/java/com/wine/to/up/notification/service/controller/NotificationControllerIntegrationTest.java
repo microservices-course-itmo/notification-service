@@ -1,22 +1,33 @@
 package com.wine.to.up.notification.service.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
-import java.util.List;
+import com.google.auth.oauth2.AccessToken;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.entity.Notification;
-import com.wine.to.up.notification.service.dto.NotificationDTO;
+import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.domain.util.NotificationType;
+import com.wine.to.up.notification.service.dto.NotificationDTO;
+import com.wine.to.up.notification.service.dto.WinePriceUpdatedWithTokensEventDTO;
 import com.wine.to.up.notification.service.exceptions.NotificationNotFoundException;
 import com.wine.to.up.notification.service.repository.NotificationRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
 
 @RunWith(SpringRunner.class)
@@ -32,6 +43,15 @@ public class NotificationControllerIntegrationTest {
 
     @Autowired
     private NotificationController notificationController;
+
+    @Before
+    public void initializeTestFcm() {
+        FirebaseOptions options = FirebaseOptions.builder().setProjectId("project-id-1")
+                .setCredentials(new MockGoogleCredentials()).build();
+        if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseApp.initializeApp(options);
+        }
+    }
 
     @Test
     public void testGetNotificationById() {
@@ -108,6 +128,48 @@ public class NotificationControllerIntegrationTest {
         });
     }
 
+    @Test
+    public void sendMessage() {
+        boolean success = false;
+        ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
+        apnsPushNotificationRequest.setDeviceToken("sampleToken");
+        apnsPushNotificationRequest.setPayload("samplePayload");
+        try {
+            notificationController.sendIosNotification(apnsPushNotificationRequest);
+            success = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertThat(success).isTrue();
+    }
+
+    @Test
+    public void testTriggerKafkaConsumer() {
+        try {
+            WinePriceUpdatedWithTokensEventDTO eventDTO = new WinePriceUpdatedWithTokensEventDTO();
+            eventDTO.setUserId(456789L);
+            eventDTO.setWineName("sampleWineName");
+            eventDTO.setWineId("987789");
+            eventDTO.setApnsToken("apnsSample");
+            eventDTO.setFcmToken("fcmSample");
+            eventDTO.setExpoToken("expoSample");
+            notificationController.triggerKafkaConsumer(eventDTO);
+            List<Notification> notificationList = notificationController.getNotificationByUserId(456789L);
+            assertThat(notificationList.size() > 0).isTrue();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private static class MockGoogleCredentials extends GoogleCredentials {
+
+        @Override
+        public AccessToken refreshAccessToken() {
+            Date expiry = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1));
+            return new AccessToken(UUID.randomUUID().toString(), expiry);
+        }
+    }
     @Test
     public void testMarkNotificationViewed() {
         NotificationDTO notification = new NotificationDTO();

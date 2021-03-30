@@ -1,9 +1,7 @@
 package com.wine.to.up.notification.service.messaging;
 
-import com.google.protobuf.CodedInputStream;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
-import com.wine.to.up.user.service.api.dto.WinePriceUpdatedResponse;
-import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
