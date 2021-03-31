@@ -2,9 +2,10 @@ package com.wine.to.up.notification.service.mobile.apns;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import ch.qos.logback.classic.Logger;
 import com.eatthepath.pushy.apns.server.*;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
-import ch.qos.logback.classic.Logger;
+import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http2.Http2Headers;
 import org.junit.After;
@@ -47,38 +48,20 @@ public class ApnsTest {
         appender = new ListAppender<>();
         appender.start();
         appLogger.addAppender(appender);
+
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+            keyPairGenerator.initialize(256, new SecureRandom());
+            apnsServer = createApnsServer();
+            apnsServer.start(PORT).get();
+        } catch (Exception e) {
+            throw new AssertionError("Failed to create apnsServer", e);
+        }
     }
 
     @After
     public void tearDown() {
         appLogger.detachAppender(appender);
-    }
-
-    @Test
-    public void testSendMessage() throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-        keyPairGenerator.initialize(256, new SecureRandom());
-
-        try {
-            apnsServer = createApnsServer();
-        } catch (Exception e) {
-            throw new AssertionError("Failed to create apnsServer", e);
-        }
-        apnsServer.start(PORT).get();
-
-        ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
-        apnsPushNotificationRequest.setDeviceToken("sample");
-        apnsPushNotificationRequest.setPayload("sample");
-
-        try {
-            apnsService.sendMessage(apnsPushNotificationRequest);
-        } catch (Exception e) {
-            throw new AssertionError("Failed to send message to apnsServer", e);
-        }
-
-        ArrayList<io.netty.buffer.ByteBuf> queue = ApnsPushNotificationStorage.INSTANCE.getQueue();
-        assertThat(queue.size()).isEqualTo(1);
-
         apnsServer.shutdown();
     }
 
@@ -93,6 +76,40 @@ public class ApnsTest {
                 .setHandlerFactory(new AcceptAllPushNotificationHandlerFactory())
                 .setListener(listener)
                 .build();
+    }
+
+    @Test
+    public void testSendMessage() {
+        ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
+        apnsPushNotificationRequest.setDeviceToken("sample");
+        apnsPushNotificationRequest.setPayload("sample");
+
+        try {
+            apnsService.sendMessage(apnsPushNotificationRequest);
+        } catch (Exception e) {
+            throw new AssertionError("Failed to send message to apnsServer", e);
+        }
+
+        ArrayList<io.netty.buffer.ByteBuf> queue = ApnsPushNotificationStorage.INSTANCE.getQueue();
+        assertThat(queue.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testSendAll() {
+        WinePriceUpdatedWithTokensEvent event = WinePriceUpdatedWithTokensEvent.newBuilder()
+                .setWineId("wineId")
+                .setNewWinePrice(100.0f)
+                .setWineName("Cabernet Sauvignon")
+                .build();
+
+        try {
+            apnsService.sendAll(event);
+        } catch (Exception e) {
+            throw new AssertionError("Failed to send message to apnsServer", e);
+        }
+
+        ArrayList<io.netty.buffer.ByteBuf> queue = ApnsPushNotificationStorage.INSTANCE.getQueue();
+        assertThat(queue.size()).isEqualTo(1);
     }
 
     private class PushNotificationListener implements MockApnsServerListener {
