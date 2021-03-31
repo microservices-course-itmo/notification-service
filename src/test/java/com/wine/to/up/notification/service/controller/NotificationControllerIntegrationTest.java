@@ -14,6 +14,7 @@ import com.wine.to.up.notification.service.exceptions.NotificationNotFoundExcept
 import com.wine.to.up.notification.service.repository.NotificationRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
 @RunWith(SpringRunner.class)
@@ -129,37 +131,25 @@ public class NotificationControllerIntegrationTest {
     }
 
     @Test
-    public void sendMessage() {
-        boolean success = false;
+    public void sendMessage() throws Exception {
         ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest();
         apnsPushNotificationRequest.setDeviceToken("sampleToken");
         apnsPushNotificationRequest.setPayload("samplePayload");
-        try {
-            notificationController.sendIosNotification(apnsPushNotificationRequest);
-            success = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertThat(success).isTrue();
+        notificationController.sendIosNotification(apnsPushNotificationRequest);
     }
 
     @Test
-    public void testTriggerKafkaConsumer() {
-        try {
-            WinePriceUpdatedWithTokensEventDTO eventDTO = new WinePriceUpdatedWithTokensEventDTO();
-            eventDTO.setUserId(456789L);
-            eventDTO.setWineName("sampleWineName");
-            eventDTO.setWineId("987789");
-            eventDTO.setApnsToken("apnsSample");
-            eventDTO.setFcmToken("fcmSample");
-            eventDTO.setExpoToken("expoSample");
-            notificationController.triggerKafkaConsumer(eventDTO);
-            List<Notification> notificationList = notificationController.getNotificationByUserId(456789L);
-            assertThat(notificationList.size() > 0).isTrue();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+    public void testTriggerKafkaConsumer() throws Exception {
+        WinePriceUpdatedWithTokensEventDTO eventDTO = new WinePriceUpdatedWithTokensEventDTO();
+        eventDTO.setUserId(456789L);
+        eventDTO.setWineName("sampleWineName");
+        eventDTO.setWineId("987789");
+        eventDTO.setApnsToken("apnsSample");
+        eventDTO.setFcmToken("fcmSample");
+        eventDTO.setExpoToken("expoSample");
+        notificationController.triggerKafkaConsumer(eventDTO);
+        List<Notification> notificationList = notificationController.getNotificationByUserId(456789L);
+        assertThat(notificationList.size() > 0).isTrue();
     }
 
     private static class MockGoogleCredentials extends GoogleCredentials {
@@ -170,6 +160,7 @@ public class NotificationControllerIntegrationTest {
             return new AccessToken(UUID.randomUUID().toString(), expiry);
         }
     }
+
     @Test
     public void testMarkNotificationViewed() {
         NotificationDTO notification = new NotificationDTO();
