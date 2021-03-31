@@ -87,8 +87,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      * @see com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest
      * @see com.wine.to.up.notification.service.mobile.NotificationSender
      */
-    public void sendMessage(ApnsPushNotificationRequest request)
-            throws ExecutionException, InterruptedException {
+    public void sendMessage(ApnsPushNotificationRequest request) throws ExecutionException, InterruptedException {
         log.info("Sending notification to device: {}", request.getDeviceToken());
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), this.topic, request.getPayload()
@@ -98,10 +97,20 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
         log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
     }
 
+    private String generatePriceUpdatedPayload(String wineName, float winePrice, String wineId) {
+        final String body = "New discount on " + wineName + "! New price is: " + winePrice;
+        return "{"
+                + "\"aps\": {\"alert\": {\"title\": \"Got new discount!\", \"body\": \"" + body + "\"}}, "
+                + "\"type\": \"FAVORITE_POSITION_PRICE_DECREASE\", "
+                + "\"winePositionId\": \"" + wineId + "\""
+                + "}";
+    }
+
     @Override
     public void sendAll(WinePriceUpdatedWithTokensEvent event) {
-        final String body = "New discount on " + event.getWineName() + "! New price is: " + event.getNewWinePrice();
-        final String payload = "{\"aps\": {\"alert\": {\"title\": \"Got new discount!\", \"body\": \"" + body + "\"}}}";
+        final String payload = this.generatePriceUpdatedPayload(
+                event.getWineName(), event.getNewWinePrice(), event.getWineId()
+        );
         event.getUserTokensList().forEach(t-> t.getIosTokensList().forEach(token-> {
             final ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest(token, payload);
             try {
