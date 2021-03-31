@@ -111,7 +111,7 @@ public class NotificationController {
             apnsService.sendMessage(notificationRequest);
         }
         catch (Exception e) {
-            log.error("Failed to send push-notification");
+            log.error("Failed to send push-notification", e);
         }
     }
 

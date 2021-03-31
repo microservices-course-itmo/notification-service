@@ -107,6 +107,13 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
+        <!-- Json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+
         <!-- for tests -->
         <dependency>
             <groupId>com.h2database</groupId>

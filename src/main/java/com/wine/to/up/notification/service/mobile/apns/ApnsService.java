@@ -5,10 +5,15 @@ import com.eatthepath.pushy.apns.ApnsClientBuilder;
 import com.eatthepath.pushy.apns.PushNotificationResponse;
 import com.eatthepath.pushy.apns.auth.ApnsSigningKey;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wine.to.up.notification.service.components.NotificationServiceMetricsCollector;
 import com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest;
 import com.wine.to.up.notification.service.mobile.FileDecryptor;
 import com.wine.to.up.notification.service.mobile.NotificationSender;
+import com.wine.to.up.notification.service.mobile.apns.payload.ApnsPayload;
+import com.wine.to.up.notification.service.mobile.apns.payload.ApnsPayloadAlert;
+import com.wine.to.up.notification.service.mobile.apns.payload.ApnsPayloadAps;
 import com.wine.to.up.user.service.api.message.WinePriceUpdatedWithTokensEventOuterClass.WinePriceUpdatedWithTokensEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +92,7 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
      * @see com.wine.to.up.notification.service.domain.model.apns.ApnsPushNotificationRequest
      * @see com.wine.to.up.notification.service.mobile.NotificationSender
      */
-    public void sendMessage(ApnsPushNotificationRequest request)
-            throws ExecutionException, InterruptedException {
+    public void sendMessage(ApnsPushNotificationRequest request) throws ExecutionException, InterruptedException {
         log.info("Sending notification to device: {}", request.getDeviceToken());
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(
                 request.getDeviceToken(), this.topic, request.getPayload()
@@ -98,10 +102,28 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
         log.info("Sent message to device: {}, {}", request.getDeviceToken(), response.toString());
     }
 
+    private String generatePriceUpdatedPayload(String wineName, float winePrice, String wineId)
+            throws JsonProcessingException {
+        ApnsPayloadAps aps = new ApnsPayloadAps(
+                new ApnsPayloadAlert(
+                        "Got new discount!",
+                        "New discount on " + wineName + "! New price is: " + winePrice
+                )
+        );
+        ApnsPayload payload = new ApnsPayload(aps, "FAVORITE_POSITION_PRICE_DECREASE", wineId);
+        ObjectMapper om = new ObjectMapper();
+        return om.writeValueAsString(payload);
+    }
+
     @Override
     public void sendAll(WinePriceUpdatedWithTokensEvent event) {
-        final String body = "New discount on " + event.getWineName() + "! New price is: " + event.getNewWinePrice();
-        final String payload = "{\"aps\": {\"alert\": {\"title\": \"Got new discount!\", \"body\": \"" + body + "\"}}}";
+        String payload;
+        try {
+            payload = this.generatePriceUpdatedPayload(event.getWineName(), event.getNewWinePrice(), event.getWineId());
+        } catch (JsonProcessingException e) {
+            log.error("Failed to parse payload", e);
+            return;
+        }
         event.getUserTokensList().forEach(t-> t.getIosTokensList().forEach(token-> {
             final ApnsPushNotificationRequest apnsPushNotificationRequest = new ApnsPushNotificationRequest(token, payload);
             try {
@@ -116,5 +138,4 @@ public class ApnsService implements NotificationSender<ApnsPushNotificationReque
             }
         }));
     }
-
 }
