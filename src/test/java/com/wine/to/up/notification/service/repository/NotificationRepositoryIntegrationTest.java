@@ -164,7 +164,7 @@ public class NotificationRepositoryIntegrationTest {
 
             Notification found = probablyFound.get();
             assertThat(found.getUserId()).isEqualTo(i);
-            assertThat(found.getMessage()).contains("New discount on test! New price is: 10.000000");
+            assertThat(found.getMessage()).contains("New discount on test! New price is: 10");
             assertThat(found.getWineId()).isEqualTo("111abc");
         }
     }

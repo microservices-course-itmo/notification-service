@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +25,7 @@ public class ExpoService implements NotificationSender<ExpoNotificationRequest> 
                 .to(request.getToken())
                 .title(request.getTitle())
                 .body(request.getMessage())
+                .data(request.getData())
                 .build();
 
             ExpoPushClient.sendPushNotifications(List.of(message)).getTickets();
@@ -37,10 +39,12 @@ public class ExpoService implements NotificationSender<ExpoNotificationRequest> 
     public void sendAll(WinePriceUpdatedWithTokensEvent event) {
         final String title = String.format("New discount on %s!", event.getWineName());
         final String message = String.format("New price is: %.1f", event.getNewWinePrice());
+        final HashMap<String, Object> data = new HashMap<>();
+        data.put("WineId", event.getWineId());
 
         event.getUserTokensList().forEach(userTokens -> userTokens.getExpoTokensList().forEach(token -> {
                     try {
-                        sendMessage(new ExpoNotificationRequest(token, title, message));
+                        sendMessage(new ExpoNotificationRequest(token, title, message, data));
                     } catch (InterruptedException | ExecutionException e) {
                         log.error("Couldn't send Expo push:", e);
                         Thread.currentThread().interrupt();
