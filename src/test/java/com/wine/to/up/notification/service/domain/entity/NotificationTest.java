@@ -8,6 +8,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -54,5 +58,15 @@ public class NotificationTest {
         Notification notification = new Notification();
         notification.setUserId(userId);
         assertThat(notification.getUserId()).isEqualTo(userId);
+    }
+
+    @Test
+    public void setCurrentTime() {
+        Notification notification = new Notification();
+        Date date = new Date();
+        notification.setCurrentTime();
+        long diff = notification.getTimestamp().getTime() - date.getTime();
+        long differenceInSeconds = TimeUnit.MILLISECONDS.toSeconds(diff);
+        assertThat(differenceInSeconds < 10).isTrue();
     }
 }
