@@ -39,6 +39,8 @@ public interface NotificationRepository extends CrudRepository<Notification, Lon
         return savedNotifications;
     }
 
+    List<Notification> deleteByUserId(long userId);
+
     @Slf4j
     final class LogWrapper {}
 }
