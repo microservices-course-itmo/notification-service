@@ -74,6 +74,13 @@ public class NotificationController {
         log.info("Notification entry deleted. id = {}", id);
     }
 
+    @DeleteMapping
+    public void deleteNotificationByUserId(@RequestParam(value = "userId") Long userId) {
+        log.debug("New notification CRUD request. Action = DELETE. userId = {}", userId);
+        notificationRepository.deleteByUserId(userId);
+        log.info("Notification entries deleted. userId = {}", userId);
+    }
+
     @PostMapping(value = "/")
     public Notification createNotification(@RequestBody NotificationDTO notification) {
         log.debug("New notification CRUD request. Action = SAVE.");
